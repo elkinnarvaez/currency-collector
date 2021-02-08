@@ -1,0 +1,36 @@
+{% extends "authentication/base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+    <div class="container">
+        <section id="content">
+        <form action="#" method="post">
+            <h1>Sign up</h1>
+            <div>
+                <input type="text" name="name" placeholder="Name" required="" id="username" />
+            </div>
+            <div>
+                <input type="text" name="email" placeholder="Email" required="" id="username" />
+            </div>
+            <div>
+                <input type="password" name="password" placeholder="Password" required="" id="password" />
+            </div>
+            <div>
+                <input type="password" name="confirmed_password" placeholder="Confirm password" required="" id="password" />
+            </div>
+            <div>
+            <input type="submit" value="Sign up" />
+            <a href="/login">Already have an account?</a>
+            </div>
+        </form>
+        </section>
+    </div>
+    <div class="messages">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <p>{{msg}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View Users</title>
+    </head>
+    <body>
+        {% for usr in users %}
+            <p>Id: {{usr._id}}, Name: {{usr.name}}, Email: {{usr.email}}, Password: {{usr.password}}, Picture path: {{usr.profile_picture_path}}</p>
+        {% endfor %}
+    </body>
+</html>
