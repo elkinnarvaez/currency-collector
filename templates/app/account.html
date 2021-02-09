@@ -23,16 +23,17 @@
         <!-- Profile -->
         <div class="w3-card w3-round w3-white">
         <div class="w3-container">
-            <h4 class="w3-center">My Profile</h4>
-            <p class="w3-center"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+            <!-- <h4 style="position: relative; left: 10%;" style="position: relative; left: 10%;">My Profile</h4> -->
+            <br>
+            <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
             <form enctype=multipart/form-data method="post">
-                <input type="file" name="file" style="position: relative; left: 34%;" />
+                <input type="file" name="file" style="position: relative; left: 10%;"/>
                 <br>
                 <br>
-                <input type="submit" value="Change picture" name="change_picture" style="position: relative; left: 30%;"/>
+                <input type="submit" value="Change picture" name="change_picture" style="position: relative; left: 10%;"/>
             </form>
             <br>
-            <p style="position: relative; left: 11%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
+            <p style="position: relative; left: 10%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
             <div class="messages">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
