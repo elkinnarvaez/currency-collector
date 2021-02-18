@@ -3,6 +3,7 @@ from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
+import psycopg2
 
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -12,7 +13,6 @@ app.secret_key = "secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-#app.permanent_session_lifetime = timedelta(hours=1)
 
 db = SQLAlchemy(app)
 
