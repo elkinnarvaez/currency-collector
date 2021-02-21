@@ -1,2 +1,2 @@
 Get-ChildItem -Path Env:\
-$env:DATABASE_URL = 'postgresql:///postgres'
+$env:DATABASE_URL = 'postgres+psycopg2://postgres:Mariamarino2406@localhost:54216/users'
