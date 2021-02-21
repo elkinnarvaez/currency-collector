@@ -10,7 +10,7 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
