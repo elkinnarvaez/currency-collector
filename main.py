@@ -13,7 +13,9 @@ app.secret_key = "secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'connect_args': {'sslmode':'require'}
+}
 db = SQLAlchemy(app)
 
 class users(db.Model):
