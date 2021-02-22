@@ -52,8 +52,12 @@ def uploadFile(file):
         ExpiresIn = 3600
     )
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, new_file_name)
-    print(url)
-    print(presigned_post)
+    presigned_post['file'] = file
+    r = request.post(presigned_post['url'], data = presigned_post)
+    session["profile_picture_path"] = url
+    user = users.query.filter_by(email = session["email"]).first()
+    user.profile_picture_path = session["profile_picture_path"]
+    db.session.commit()
 
 @app.after_request
 def add_header(response):
@@ -128,7 +132,8 @@ def signup():
         if(add_user):
             session["filling_email"] = f_email
             session["filling_password"] = f_password
-            new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
+            #new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
+            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "avatar3.png"))
             db.session.add(new_user)
             db.session.commit()
             print("You were signed up successfully.")

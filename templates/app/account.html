@@ -25,7 +25,8 @@
         <div class="w3-container">
             <!-- <h4 style="position: relative; left: 10%;" style="position: relative; left: 10%;">My Profile</h4> -->
             <br>
-            <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+            <!-- <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
+            <p style="position: relative; left: 10%;"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
             <form enctype=multipart/form-data method="post">
                 <input type="file" name="file" style="position: relative; left: 10%;"/>
                 <br>
