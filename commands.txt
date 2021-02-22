@@ -1,3 +1,6 @@
 Get-ChildItem -Path Env:\
 $env:DATABASE_URL = 'postgres://postgres:Mariamarino2406@localhost'
+$env:AWS_ACCESS_KEY_ID = 'AKIAI3Z64A772QLNQOIQ'
+$env:AWS_SECRET_ACCESS_KEY = '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'
+$env:S3_BUCKET_NAME = 'currencycollector'
 psql postgres://postgres:Mariamarino2406@localhost

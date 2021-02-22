@@ -1,12 +1,12 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
-import os
+import os, json, boto3, psycopg2
 from werkzeug.utils import secure_filename
-import psycopg2
+import requests
 
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
@@ -34,6 +34,26 @@ class users(db.Model):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def uploadFile(file):
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    file_name = secure_filename(file.filename)
+    new_file_name = session["email"] + "." + file_name.rsplit('.', 1)[1].lower()
+    file_type = "image/" + file_name.rsplit('.', 1)[1].lower()
+    s3 = boto3.client('s3')
+    presigned_post = s3.generate_presigned_post(
+        Bucket = S3_BUCKET_NAME,
+        Key = new_file_name,
+        Fields = {"acl": "public-read", "Content-Type": file_type},
+        Conditions = [
+        {"acl": "public-read"},
+        {"Content-Type": file_type}
+        ],
+        ExpiresIn = 3600
+    )
+    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, new_file_name)
+    print(url)
+    print(presigned_post)
 
 @app.after_request
 def add_header(response):
@@ -133,14 +153,15 @@ def account():
                 flash('No selected file')
                 return redirect(request.url)
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                new_file_name = session["email"] + "." + filename.rsplit('.', 1)[1].lower()
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
-                flash("Picture changed succesfully.")
-                session["profile_picture_path"] = "app/images/user_profile_pictures/" + new_file_name
-                user = users.query.filter_by(email = session["email"]).first()
-                user.profile_picture_path = session["profile_picture_path"]
-                db.session.commit()
+                # filename = secure_filename(file.filename)
+                # new_file_name = session["email"] + "." + filename.rsplit('.', 1)[1].lower()
+                # file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
+                # flash("Picture changed succesfully.")
+                # session["profile_picture_path"] = "app/images/user_profile_pictures/" + new_file_name
+                # user = users.query.filter_by(email = session["email"]).first()
+                # user.profile_picture_path = session["profile_picture_path"]
+                # db.session.commit()
+                uploadFile(file)
         return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
     else:
         flash("You're not logged in. Please type your email and password or create a new account.")

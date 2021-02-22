@@ -10,7 +10,6 @@ function myFunction(id) {
     x.previousElementSibling.className.replace(" w3-theme-d1", "");
   }
 }
-  
 // Used to toggle the menu on smaller screens when clicking on the menu button
 function openNav() {
   var x = document.getElementById("navDemo");
