@@ -68,7 +68,7 @@ def uploadFile(file):
     file_type = "image/" + file_name.rsplit('.', 1)[1].lower()
     s3 = boto3.client('s3', aws_access_key_id = AWS_ACCESS_KEY_ID, aws_secret_access_key = AWS_SECRET_ACCESS_KEY)
     #file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
-    s3.upload_fileobj(file, S3_BUCKET_NAME, new_file_name)
+    s3.upload_fileobj(file, S3_BUCKET_NAME, new_file_name, ExtraArgs={'ACL': 'public-read'})
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, new_file_name)
     session["profile_picture_path"] = url
     user = users.query.filter_by(email = session["email"]).first()
