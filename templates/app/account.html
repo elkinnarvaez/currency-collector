@@ -6,14 +6,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">My Account</a>
+                        <a class="nav-link" href="/account">My Account</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Colection</a>
+                        <a class="nav-link" href="/collection">Collection</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Friends</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </nav>
@@ -22,34 +22,34 @@
     <div class="w3-col m3 profile">
         <!-- Profile -->
         <div class="w3-card w3-round w3-white">
-        <div class="w3-container">
-            <!-- <h4 style="position: relative; left: 10%;" style="position: relative; left: 10%;">My Profile</h4> -->
-            <br>
-            <!-- <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-            <p style="position: relative; left: 10%;"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-            <form enctype=multipart/form-data method="post">
-                <input type="file" name="file" style="position: relative; left: 10%;"/>
+            <div class="w3-container">
+                <!-- <h4 style="position: relative; left: 10%;" style="position: relative; left: 10%;">My Profile</h4> -->
                 <br>
+                <!-- <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
+                <!-- <p style="position: relative; left: 10%;"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
+                <p style="position: relative; left: 10%;"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                <form enctype=multipart/form-data method="post">
+                    <input type="file" name="file" style="position: relative; left: 10%;"/>
+                    <br>
+                    <br>
+                    <input type="submit" value="Change picture" name="change_picture" style="position: relative; left: 10%;"/>
+                </form>
                 <br>
-                <input type="submit" value="Change picture" name="change_picture" style="position: relative; left: 10%;"/>
-            </form>
-            <br>
-            <p style="position: relative; left: 10%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
-            <div class="messages">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for msg in messages %}
-                            <p>{{msg}}</p>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+                <p style="position: relative; left: 10%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
+                <div style="position: relative; left: 10%;" class="messages">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for msg in messages %}
+                                <p>{{msg}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <hr>
+                <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
+                <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
             </div>
-            <hr>
-            <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
-            <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
-        </div>
         </div>
         <br>
-    <!-- End Left Column -->
     </div>
 {% endblock %}

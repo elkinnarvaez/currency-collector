@@ -1,3 +1,4 @@
+import re
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
@@ -152,7 +153,6 @@ def signup():
             new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"))
             db.session.add(new_user)
             db.session.commit()
-            print("You were signed up successfully.")
             flash("You were signed up successfully.")
             return redirect(url_for("login"))
     if "name" in session:
@@ -189,6 +189,40 @@ def account():
         flash("You're not logged in. Please type your email and password or create a new account.")
         return redirect(url_for("login"))
 
+@app.route("/collection", methods=["POST", "GET"])
+def collection():
+    if "name" in session:
+        if request.method == "POST":
+            # check if the post request has the file part
+            if 'obverse_image' not in request.files:
+                flash('No obverse_image part')
+                return redirect(request.url)
+            if 'reverse_image' not in request.files:
+                flash('No reverse_image part')
+                return redirect(request.url)
+            obverse_image = request.files['obverse_image']
+            reverse_image = request.files['reverse_image']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if obverse_image.filename == '':
+                flash('Obverse image not selected')
+                return redirect(request.url)
+            if reverse_image.filename == '':
+                flash('Reverse image not selected')
+                return redirect(request.url)
+            if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
+                product_type = request.form["type"]
+                country = request.form["country"]
+                denomination = request.form["denomination"]
+                year = request.form["year"]
+                composition = request.form["composition"]
+                description = request.form["description"]
+                
+        return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
+    else:
+        flash("You're not logged in. Please type your email and password or create a new account.")
+        return redirect(url_for("login"))
+
 @app.route("/view/users")
 def view():
-    return render_template("app/view.html", users = users.query.all())
+    return render_template("app/users.html", users = users.query.all())

@@ -13,3 +13,14 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     top: 23%;
     left: 5%;
 }
+
+.add-item label{
+    display: inline-block;
+    width: 125px;
+    text-align: right;
+}
+
+.description-div{
+    display: flex;
+    align-items: center;
+}
