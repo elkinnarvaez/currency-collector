@@ -35,25 +35,41 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# def uploadFile(file):
+#     S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+#     file_name = secure_filename(file.filename)
+#     new_file_name = session["email"] + "." + file_name.rsplit('.', 1)[1].lower()
+#     file_type = "image/" + file_name.rsplit('.', 1)[1].lower()
+#     s3 = boto3.client('s3')
+#     presigned_post = s3.generate_presigned_post(
+#         Bucket = S3_BUCKET_NAME,
+#         Key = new_file_name,
+#         Fields = {"acl": "public-read", "Content-Type": file_type},
+#         Conditions = [
+#         {"acl": "public-read"},
+#         {"Content-Type": file_type}
+#         ],
+#         ExpiresIn = 3600
+#     )
+#     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, new_file_name)
+#     #file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
+#     r = requests.post(presigned_post['url'], data = presigned_post["fields"])
+#     session["profile_picture_path"] = url
+#     user = users.query.filter_by(email = session["email"]).first()
+#     user.profile_picture_path = session["profile_picture_path"]
+#     db.session.commit()
+
 def uploadFile(file):
     S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     file_name = secure_filename(file.filename)
     new_file_name = session["email"] + "." + file_name.rsplit('.', 1)[1].lower()
     file_type = "image/" + file_name.rsplit('.', 1)[1].lower()
-    s3 = boto3.client('s3')
-    presigned_post = s3.generate_presigned_post(
-        Bucket = S3_BUCKET_NAME,
-        Key = new_file_name,
-        Fields = {"acl": "public-read", "Content-Type": file_type},
-        Conditions = [
-        {"acl": "public-read"},
-        {"Content-Type": file_type}
-        ],
-        ExpiresIn = 3600
-    )
+    s3 = boto3.client('s3', aws_access_key_id = AWS_ACCESS_KEY_ID, aws_secret_access_key = AWS_SECRET_ACCESS_KEY)
+    #file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
+    s3.upload_fileobj(file, S3_BUCKET_NAME, new_file_name)
     url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, new_file_name)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
-    r = requests.post(presigned_post['url'], data = presigned_post["fields"])
     session["profile_picture_path"] = url
     user = users.query.filter_by(email = session["email"]).first()
     user.profile_picture_path = session["profile_picture_path"]
