@@ -162,6 +162,7 @@ def account():
                 # user.profile_picture_path = session["profile_picture_path"]
                 # db.session.commit()
                 uploadFile(file)
+                flash("Picture changed succesfully.")
         return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
     else:
         flash("You're not logged in. Please type your email and password or create a new account.")
