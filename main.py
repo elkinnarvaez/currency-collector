@@ -102,7 +102,7 @@ def uploadProfilePicture(file):
     user.profile_picture_path = session["profile_picture_path"]
     db.session.commit()
 
-def uploadColectionItem(file):
+def uploadCollectionItem(file):
     S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -234,8 +234,8 @@ def account():
         flash("You're not logged in. Please type your email and password or create a new account.")
         return redirect(url_for("login"))
 
-@app.route("/collection", methods=["POST", "GET"])
-def collection():
+@app.route("/add_item", methods=["POST", "GET"])
+def add_item():
     if "name" in session:
         if request.method == "POST":
             # check if the post request has the file part
@@ -262,14 +262,23 @@ def collection():
                 year = request.form["year"]
                 composition = request.form["composition"]
                 description = request.form["description"]
-                obverse_image_url = uploadColectionItem(obverse_image)
-                reverse_image_url = uploadColectionItem(reverse_image)
-                # obverse_image_url = "fake.com"
-                # reverse_image_url = "fake2.com"
+                # obverse_image_url = uploadCollectionItem(obverse_image)
+                # reverse_image_url = uploadCollectionItem(reverse_image)
+                obverse_image_url = "fake.com"
+                reverse_image_url = "fake2.com"
                 new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
                 db.session.add(new_item)
                 db.session.commit()
                 flash("Item added successfully")
+        items = collection_items.query.filter_by(email = session["email"])
+        return render_template("app/add_item.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items)
+    else:
+        flash("You're not logged in. Please type your email and password or create a new account.")
+        return redirect(url_for("login"))
+
+@app.route("/collection", methods=["POST", "GET"])
+def collection():
+    if "name" in session:
         items = collection_items.query.filter_by(email = session["email"])
         return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items)
     else:

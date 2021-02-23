@@ -25,13 +25,22 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     align-items: center;
 }
 
-.collection-container{
+.collection-container-add-item{
     position: absolute;
     top: 23%;
     left: 43%;
-    width: 49%;
+    width: 46%;
     height: 71%;
-    overflow-y: scroll;
+    overflow-y: auto;
+}
+
+.collection-container{
+    position: absolute;
+    top: 23%;
+    left: 3%;
+    width: 90%;
+    height: 71%;
+    overflow-y: auto;
 }
 
 .items-list{
@@ -42,7 +51,74 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     align-content: flex-start;
 }
 
-.item{
-    background: rgb(182, 150, 150);
+.item-coin{
     margin:0.5em;
+    width: 310px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
 }
+
+.item-bill{
+    margin:0.5em;
+    width: 310px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+}
+
+.item_information{
+    margin:0.3em;
+    max-width: 220px;
+    overflow-x: auto;
+}
+
+.images_container{
+    position: relative;
+}
+
+.images_container:hover .reverse_side_bill{
+    opacity: 1;
+}
+
+.images_container:hover .reverse_side_coin{
+    opacity: 1;
+}
+
+.obverse_side_coin{
+    margin: 0.3em;
+    width: 210px;
+}
+
+.reverse_side_coin{
+    margin: 0.3em;
+    width: 210px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: .2s ease;
+}
+
+.obverse_side_bill{
+    margin: 0.3em;
+    width: 297px;
+}
+
+.reverse_side_bill{
+    margin: 0.3em;
+    width: 297px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: .2s ease;
+  }

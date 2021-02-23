@@ -1,4 +1,8 @@
 1. Descomentar línea 29 del archivo account.html y comentar línea 30
 2. Descomentar línea 40 del archivo base.html y comentar línea 41
 3. Descomentar línea 15 del archivo home.html y comentar línea 16
-2. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección.
+4. Descomentar línea 90 y 91 del archivo add_item.html y comentar las líneas 88 y 89.
+5. Descomentar línea 102 y 103 del archivo add_item.html y comentar las líneas 100 y 101.
+6. Descomentar línea 30 y 31 del archivo collection.html y comentar las líneas 28 y 29.
+7. Descomentar línea 44 y 45 del archivo collection.html y comentar las líneas 42 y 43.
+8. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección.
