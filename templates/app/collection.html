@@ -78,11 +78,21 @@
         </div>
     </div>
 
-    <div class="collection_packet" style="width: 49%; height: 10%;">
-        <div class="w3-card w3-round w3-white">
-            <div class="w3-container">
-                <h3>Add a new item into your collection:</h3>
-                <br>
+    <div class="collection-container">
+        <div class="w3-card w3-round w3-light-gray">
+            <div class="w3-container items-list">
+                {% for item in items %}
+                    <div class="item">
+                        <p>Type: {{item.product_type}}</p>
+                        <p>Country: {{item.country}}</p>
+                        <p>Denomination: {{item.denomination}}</p>
+                        <p>Year: {{item.year}}</p>
+                        <p>Composition: {{item.composition}}</p>
+                        <p>Description: {{item.description}}</p>
+                        <img src="{{item.obverse_image_url}}">
+                        <img src="{{item.reverse_image_url}}">
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -262,13 +262,16 @@ def collection():
                 year = request.form["year"]
                 composition = request.form["composition"]
                 description = request.form["description"]
-                # obverse_image_url = uploadColectionItem(obverse_image)
-                # reverse_image_url = uploadColectionItem(reverse_image)
-                # new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
-                # db.session.add(new_item)
-                # db.session.commit()
+                obverse_image_url = uploadColectionItem(obverse_image)
+                reverse_image_url = uploadColectionItem(reverse_image)
+                # obverse_image_url = "fake.com"
+                # reverse_image_url = "fake2.com"
+                new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
+                db.session.add(new_item)
+                db.session.commit()
                 flash("Item added successfully")
-        return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
+        items = collection_items.query.filter_by(email = session["email"])
+        return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items)
     else:
         flash("You're not logged in. Please type your email and password or create a new account.")
         return redirect(url_for("login"))

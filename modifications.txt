@@ -1,2 +1,4 @@
-1. Descomentar las fotos de perfil para que tome la url correspondiente en aws.
+1. Descomentar línea 29 del archivo account.html y comentar línea 30
+2. Descomentar línea 40 del archivo base.html y comentar línea 41
+3. Descomentar línea 15 del archivo home.html y comentar línea 16
 2. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección.

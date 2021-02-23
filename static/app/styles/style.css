@@ -14,12 +14,6 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     left: 5%;
 }
 
-.collection_packet{
-    position: absolute;
-    top: 23%;
-    left: 43%;
-}
-
 .add-item label{
     display: inline-block;
     width: 125px;
@@ -29,4 +23,26 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .description-div{
     display: flex;
     align-items: center;
+}
+
+.collection-container{
+    position: absolute;
+    top: 23%;
+    left: 43%;
+    width: 49%;
+    height: 71%;
+    overflow-y: scroll;
+}
+
+.items-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.item{
+    background: rgb(182, 150, 150);
+    margin:0.5em;
 }
