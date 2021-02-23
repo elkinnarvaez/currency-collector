@@ -1,0 +1,2 @@
+1. Descomentar las fotos de perfil para que tome la url correspondiente en aws.
+2. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección.

@@ -24,13 +24,39 @@ class users(db.Model):
     name = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(100))
-    profile_picture_path = db.Column(db.String(200))
+    profile_picture_path = db.Column(db.String(800))
+    num_item = db.Column(db.Integer)
 
-    def __init__(self, name, email, password, profile_picture_path):
+    def __init__(self, name, email, password, profile_picture_path, num_item):
         self.name = name
         self.email = email
         self.password = password
         self.profile_picture_path = profile_picture_path
+        self.num_item = num_item
+
+class collection_items(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    product_type = db.Column(db.String(50))
+    country = db.Column(db.String(100))
+    denomination = db.Column(db.String(100))
+    year = db.Column(db.String(20))
+    composition = db.Column(db.String(100))
+    description = db.Column(db.String(500))
+    obverse_image_path = db.Column(db.String(800))
+    reverse_image_path = db.Column(db.String(800))
+    email = db.Column(db.String(100))
+
+    def __init__(self, product_type, country, denomination, year, composition, description, obverse_image_path, reverse_image_path, email):
+        self.product_type = product_type
+        self.country = country
+        self.denomination = denomination
+        self.year = year
+        self.composition = composition
+        self.description = description
+        self.obverse_image_path = obverse_image_path
+        self.reverse_image_path = reverse_image_path
+        self.email = email
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -60,7 +86,7 @@ def allowed_file(filename):
 #     user.profile_picture_path = session["profile_picture_path"]
 #     db.session.commit()
 
-def uploadFile(file):
+def uploadProfilePicture(file):
     S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -75,6 +101,23 @@ def uploadFile(file):
     user = users.query.filter_by(email = session["email"]).first()
     user.profile_picture_path = session["profile_picture_path"]
     db.session.commit()
+
+def uploadColectionItem(file):
+    S3_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    file_name = secure_filename(file.filename)
+    new_file_name = session["email"] + "-" + str(session["num_item"]) + "." + file_name.rsplit('.', 1)[1].lower()
+    file_type = "image/" + file_name.rsplit('.', 1)[1].lower()
+    s3 = boto3.client('s3', aws_access_key_id = AWS_ACCESS_KEY_ID, aws_secret_access_key = AWS_SECRET_ACCESS_KEY)
+    #file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
+    s3.upload_fileobj(file, S3_BUCKET_NAME, "collection_items/" + new_file_name, ExtraArgs={'ACL': 'public-read'})
+    url = 'https://%s.s3.amazonaws.com/%s' % (S3_BUCKET_NAME, "collection_items/" + new_file_name)
+    session["num_item"] = session["num_item"] + 1
+    user = users.query.filter_by(email = session["email"]).first()
+    user.num_item = session["num_item"]
+    db.session.commit()
+    return url
 
 @app.after_request
 def add_header(response):
@@ -100,6 +143,7 @@ def logout():
     session.pop("email", None)
     session.pop("password", None)
     session.pop("profile_picure_path", None)
+    session.pop("num_item", None)
     return redirect(url_for("login"))
 
 @app.route("/login/", methods=["POST", "GET"])
@@ -122,6 +166,7 @@ def login():
                 session["email"] = user.email
                 session["password"] = user.password
                 session["profile_picture_path"] = user.profile_picture_path
+                session["num_item"] = user.num_item
                 return redirect(url_for("home"))
             else:
                flash("Password incorrect. Please try again.") 
@@ -150,7 +195,7 @@ def signup():
             session["filling_email"] = f_email
             session["filling_password"] = f_password
             #new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
-            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"))
+            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0)
             db.session.add(new_user)
             db.session.commit()
             flash("You were signed up successfully.")
@@ -182,7 +227,7 @@ def account():
                 # user = users.query.filter_by(email = session["email"]).first()
                 # user.profile_picture_path = session["profile_picture_path"]
                 # db.session.commit()
-                uploadFile(file)
+                uploadProfilePicture(file)
                 flash("Picture changed succesfully.")
         return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
     else:
@@ -217,7 +262,12 @@ def collection():
                 year = request.form["year"]
                 composition = request.form["composition"]
                 description = request.form["description"]
-                
+                # obverse_image_url = uploadColectionItem(obverse_image)
+                # reverse_image_url = uploadColectionItem(reverse_image)
+                # new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
+                # db.session.add(new_item)
+                # db.session.commit()
+                flash("Item added successfully")
         return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
     else:
         flash("You're not logged in. Please type your email and password or create a new account.")
