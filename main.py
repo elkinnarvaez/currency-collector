@@ -268,10 +268,10 @@ def add_item():
                 year = request.form["year"]
                 composition = request.form["composition"]
                 description = request.form["description"]
-                obverse_image_url = uploadCollectionItem(obverse_image)
-                reverse_image_url = uploadCollectionItem(reverse_image)
-                # obverse_image_url = "fake.com"
-                # reverse_image_url = "fake2.com"
+                # obverse_image_url = uploadCollectionItem(obverse_image)
+                # reverse_image_url = uploadCollectionItem(reverse_image)
+                obverse_image_url = "fake.com"
+                reverse_image_url = "fake2.com"
                 new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
                 db.session.add(new_item)
                 db.session.commit()
