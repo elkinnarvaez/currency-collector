@@ -12,8 +12,8 @@
                     <div class="w3-container">
                         <h4 class="w3-center">My Profile</h4>
                         <!-- <p class="w3-center"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                        <!-- <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                        <p class="w3-center"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                        <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                        <!-- <p class="w3-center"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
                         <hr>
                         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
                         <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
@@ -39,8 +39,8 @@
                     {% set item_owner_name = user_objects[item.email].name %}
                     {% set item_owner_profile_picture_path = user_objects[item.email].profile_picture_path %}
                     <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-                        <!-- <img src={{item_owner_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> -->
-                        <img src="" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                        <img src={{item_owner_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                        <!-- <img src="" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> -->
                         <span class="w3-right w3-opacity">1 min</span>
                         <h4>{{item_owner_name}}</h4><br>
                         <hr class="w3-clear">
@@ -57,19 +57,19 @@
                             {% if item.product_type == "Coin" %}
                                 <div class="item-coin w3-container w3-white w3-round w3-card">
                                     <div class="images_container">
-                                        <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                        <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
-                                        <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
+                                        <!-- <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                        <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}"> -->
+                                        <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_coin" src="{{item.reverse_image_path}}">
                                     </div>
                                 </div>
                             {% else %}
                                 <div class="item-bill w3-container w3-white w3-round w3-card">
                                     <div class="images_container">
-                                        <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                        <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
-                                        <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
+                                        <!-- <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                        <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}"> -->
+                                        <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_bill" src="{{item.reverse_image_path}}">
                                     </div>
                                 </div>  
                             {% endif %}
