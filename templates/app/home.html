@@ -12,8 +12,8 @@
                     <div class="w3-container">
                         <h4 class="w3-center">My Profile</h4>
                         <!-- <p class="w3-center"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                        <!-- <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                        <p class="w3-center"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                        <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                        <!-- <p class="w3-center"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
                         <hr>
                         <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
                         <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
@@ -34,9 +34,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                </div>              
                 <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                    <!-- {% for item in items %}
+                        {% set item_owner_name = user_objects[item.email].name %}
+                        {% set item_owner_profile_picture_path = user_objects[item.email].profile_picture_path %}
+                        <p>{{item_owner_name}}</p>
+                        <p>{{item_owner_profile_picture_path}}</p>
+                    {% endfor %} -->
                     <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
                     <span class="w3-right w3-opacity">1 min</span>
                     <h4>John Doe</h4><br>

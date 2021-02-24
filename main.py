@@ -132,7 +132,13 @@ def start():
 @app.route("/home/")
 def home():
     if "name" in session:
-        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
+        items = list(collection_items.query.filter(collection_items.email != session["email"]))
+        user_objects = dict()
+        for item in items:
+            if item.email not in user_objects:
+                user = users.query.filter_by(email = item.email).first()
+                user_objects[item.email] = user
+        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items, user_objects = user_objects)
     else:
         flash("You're not logged in. Please type your email and password or create a new account.")
         return redirect(url_for("login"))
@@ -262,10 +268,10 @@ def add_item():
                 year = request.form["year"]
                 composition = request.form["composition"]
                 description = request.form["description"]
-                # obverse_image_url = uploadCollectionItem(obverse_image)
-                # reverse_image_url = uploadCollectionItem(reverse_image)
-                obverse_image_url = "fake.com"
-                reverse_image_url = "fake2.com"
+                obverse_image_url = uploadCollectionItem(obverse_image)
+                reverse_image_url = uploadCollectionItem(reverse_image)
+                # obverse_image_url = "fake.com"
+                # reverse_image_url = "fake2.com"
                 new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
                 db.session.add(new_item)
                 db.session.commit()
