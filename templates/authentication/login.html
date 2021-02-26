@@ -4,28 +4,33 @@
     <div class="container">
         <section id="content">
         <form action="#" method="post">
-            <h1>Login</h1>
+            <h1>Entrar</h1>
             <div>
                 <input type="text" name="email" placeholder="Email" required="" id="username" value="{{email if email}}" />
             </div>
             <div>
-                <input type="password" name="password" placeholder="Password" required="" id="password" />
+                <input type="password" name="password" placeholder="Contraseña" required="" id="password" />
             </div>
             <div>
-            <input type="submit" value="Log in" />
-            <a href="#">Lost your password?</a>
-            <a href="/signup">Register</a>
+            <input type="submit" value="Entrar" />
+            <a href="/signup">Registrarse</a>
             </div>
         </form>
         </section>
     </div>
-    <div class="messages">
+    <div class="messages-log-in">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                {% for msg in messages %}
-                    <p>{{msg}}</p>
-                {% endfor %}
+                <ul>
+                    {% for msg in messages %}
+                        <li>{{msg}}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         {% endwith %}
+    </div>
+    <br>
+    <div class="go-to-main-page">
+        <a href="/">Ir a la página de inicio</a>
     </div>
 {% endblock %}

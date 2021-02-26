@@ -6,13 +6,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/account">My Account</a>
+                        <a class="nav-link" href="/account">Mi cuenta</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/collection">My Collection</a>
+                        <a class="nav-link" href="/collection">Mi colección</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/add_item">Add new item</a>
+                        <a class="nav-link" href="/add_item">Agregar a colección</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about_me">Acerca de mí</a>
                     </li>
                 </ul>
             </div>
@@ -21,74 +24,74 @@
     <div class="w3-col m3 profile" style="width: 35%;">
         <div class="w3-card w3-round w3-white">
             <div class="w3-container">
-                <h3>Add a new item into your collection:</h3>
-                <br>
+                <h3>Agrega un nuevo elemento a tu colección:</h3>
+                <hr>
                 <div class="add-item">
                     <form enctype=multipart/form-data method="post">
-                        <label>Type:</label>
+                        <label>Tipo:</label>
                         <select name="type">
-                            <option value="Coin">Coin</option>
-                            <option value="Paper Money">Paper money</option>
+                            <option value="Moneda">Moneda</option>
+                            <option value="Billete">Billete</option>
                         </select>
                         <br>
                         <br>
-                        <label>Country:</label>
+                        <label>País:</label>
                         <input type="text" name="country">
                         <br>
                         <br>
-                        <label>Denomination:</label>
+                        <label>Denominación:</label>
                         <input type="text" name="denomination">
                         <br>
                         <br>
-                        <label>Year:</label>
+                        <label>Año:</label>
                         <input type="text" name="year">
                         <br>
                         <br>
-                        <label>Composition:</label>
-                        <input type="text" name="composition" placeholder="Nickel, silver">
+                        <label>Composición:</label>
+                        <input type="text" name="composition" placeholder="">
                         <br>
                         <br>
                         <div class="description-div">
-                            <label>Description:</label>
-                            <textarea name="description" placeholder="Short description"></textarea>
+                            <label>Descripción:</label>
+                            <textarea name="description" placeholder="Descripción corta"></textarea>
                         </div>
                         <br>
-                        <label>Obverse image:</label>
+                        <label>Imagen anversa:</label>
                         <input type="file" name="obverse_image"/>
                         <br>
                         <br>
-                        <label>Reverse image:</label>
+                        <label>Imagen inversa:</label>
                         <input type="file" name="reverse_image"/>
                         <br>
                         <br>
-                        <input type="submit" value="Upload" name="upload" style="position: relative; left:40%;">
+                        <input type="submit" value="Agregar" name="upload" style="position: relative; left:40%;">
                     </form>
                 </div>
                 <br>
             </div>
         </div>
-        <div class="messages">
+        <!-- <div class="messages-add-item">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for msg in messages %}
-                        <p>{{msg}}</p>
+                        {{msg}}
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-        </div>
+        </div> -->
     </div>
 
     <div class="collection-container-add-item">
         <div class="w3-card w3-round w3-light-gray">
             <div class="w3-container items-list">
                 {% for item in items %}
-                    {% if item.product_type == "Coin" %}
+                    {% if item.product_type == "Moneda" %}
                         <div class="item-coin w3-container w3-white w3-round w3-card">
                             <div class="images_container">
-                                <!-- <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}"> -->
-                                <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
-                                <img class = "reverse_side_coin" src="{{item.reverse_image_path}}">
+                                <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
+                                <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
+                                <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
                             </div>
                             <div class = "item_information">
                                 <p>{{item.country}} - {{item.denomination}}</p>
@@ -97,10 +100,10 @@
                     {% else %}
                         <div class="item-bill w3-container w3-white w3-round w3-card">
                             <div class="images_container">
-                                <!-- <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}"> -->
-                                <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
-                                <img class = "reverse_side_bill" src="{{item.reverse_image_path}}">
+                                <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
+                                <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
+                                <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
                             </div>
                             <div class = "item_information">
                                 <p>{{item.country}} - {{item.denomination}}</p>

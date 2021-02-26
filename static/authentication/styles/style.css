@@ -258,3 +258,20 @@ form:after {
   background-position: 0 -135px;
   color: #00aeef;
 }
+
+.messages-sign-up{
+  position: relative;
+  left: 41%;
+  width: 20%;
+}
+
+.messages-log-in{
+  position: relative;
+  left: 41%;
+  width: 20%;
+}
+
+.go-to-main-page{
+  position: relative;
+  left: 45%; 
+}

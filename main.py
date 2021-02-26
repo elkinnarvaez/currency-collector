@@ -26,13 +26,16 @@ class users(db.Model):
     password = db.Column(db.String(100))
     profile_picture_path = db.Column(db.String(800))
     num_item = db.Column(db.Integer)
+    is_admin = db.Column(db.Boolean)
 
-    def __init__(self, name, email, password, profile_picture_path, num_item):
+    def __init__(self, name, email, password, profile_picture_path, num_item, is_admin):
         self.name = name
         self.email = email
         self.password = password
         self.profile_picture_path = profile_picture_path
         self.num_item = num_item
+        self.is_admin = is_admin
+        
 
 class collection_items(db.Model):
     _id = db.Column("id", db.Integer, primary_key=True)
@@ -127,21 +130,21 @@ def add_header(response):
 
 @app.route("/")
 def start():
-    return redirect(url_for("login"))
+    return redirect(url_for("home"))
 
 @app.route("/home/")
 def home():
+    # items = list(collection_items.query.filter(collection_items.email != session["email"]))
+    items = list(collection_items.query.filter(True))
+    user_objects = dict()
+    for item in items:
+        if item.email not in user_objects:
+            user = users.query.filter_by(email = item.email).first()
+            user_objects[item.email] = user
     if "name" in session:
-        items = list(collection_items.query.filter(collection_items.email != session["email"]))
-        user_objects = dict()
-        for item in items:
-            if item.email not in user_objects:
-                user = users.query.filter_by(email = item.email).first()
-                user_objects[item.email] = user
-        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items, user_objects = user_objects)
+        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, user_objects = user_objects, logged_in = True)
     else:
-        flash("You're not logged in. Please type your email and password or create a new account.")
-        return redirect(url_for("login"))
+        return render_template("app/home.html", name = None, email = None, profile_picture_path = None, is_admin = False, items = items, user_objects = user_objects, logged_in = False)
 
 @app.route("/logout/")
 def logout():
@@ -150,6 +153,9 @@ def logout():
     session.pop("password", None)
     session.pop("profile_picure_path", None)
     session.pop("num_item", None)
+    session.pop("is_admin", None)
+    session.pop("filling_email", None)
+    session.pop("filling_password", None)
     return redirect(url_for("login"))
 
 @app.route("/login/", methods=["POST", "GET"])
@@ -173,6 +179,7 @@ def login():
                 session["password"] = user.password
                 session["profile_picture_path"] = user.profile_picture_path
                 session["num_item"] = user.num_item
+                session["is_admin"] = user.is_admin
                 return redirect(url_for("home"))
             else:
                flash("Password incorrect. Please try again.") 
@@ -195,16 +202,16 @@ def signup():
             flash("User already exists. Try using a different email.")
             add_user = False
         if(f_password != f_confirmed_password):
-            flash("Passwords don't match.")
+            flash("Passwords don't match")
             add_user = False
         if(add_user):
             session["filling_email"] = f_email
             session["filling_password"] = f_password
             #new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
-            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0)
+            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0, False)
             db.session.add(new_user)
             db.session.commit()
-            flash("You were signed up successfully.")
+            flash("You were signed up successfully")
             return redirect(url_for("login"))
     if "name" in session:
         return redirect(url_for("home"))
@@ -233,62 +240,82 @@ def account():
                 # user = users.query.filter_by(email = session["email"]).first()
                 # user.profile_picture_path = session["profile_picture_path"]
                 # db.session.commit()
-                uploadProfilePicture(file)
+                # uploadProfilePicture(file)
                 flash("Picture changed succesfully.")
-        return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"])
+        return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
     else:
-        flash("You're not logged in. Please type your email and password or create a new account.")
+        flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
 
 @app.route("/add_item", methods=["POST", "GET"])
 def add_item():
     if "name" in session:
-        if request.method == "POST":
-            # check if the post request has the file part
-            if 'obverse_image' not in request.files:
-                flash('No obverse_image part')
-                return redirect(request.url)
-            if 'reverse_image' not in request.files:
-                flash('No reverse_image part')
-                return redirect(request.url)
-            obverse_image = request.files['obverse_image']
-            reverse_image = request.files['reverse_image']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if obverse_image.filename == '':
-                flash('Obverse image not selected')
-                return redirect(request.url)
-            if reverse_image.filename == '':
-                flash('Reverse image not selected')
-                return redirect(request.url)
-            if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
-                product_type = request.form["type"]
-                country = request.form["country"]
-                denomination = request.form["denomination"]
-                year = request.form["year"]
-                composition = request.form["composition"]
-                description = request.form["description"]
-                obverse_image_url = uploadCollectionItem(obverse_image)
-                reverse_image_url = uploadCollectionItem(reverse_image)
-                # obverse_image_url = "fake.com"
-                # reverse_image_url = "fake2.com"
-                new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
-                db.session.add(new_item)
-                db.session.commit()
-                flash("Item added successfully")
-        items = collection_items.query.filter_by(email = session["email"])
-        return render_template("app/add_item.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items)
+        if session["is_admin"] == True:
+            if request.method == "POST":
+                # check if the post request has the file part
+                if 'obverse_image' not in request.files:
+                    flash('No obverse_image part')
+                    return redirect(request.url)
+                if 'reverse_image' not in request.files:
+                    flash('No reverse_image part')
+                    return redirect(request.url)
+                obverse_image = request.files['obverse_image']
+                reverse_image = request.files['reverse_image']
+                # if user does not select file, browser also
+                # submit an empty part without filename
+                if obverse_image.filename == '':
+                    flash('Obverse image not selected')
+                    return redirect(request.url)
+                if reverse_image.filename == '':
+                    flash('Reverse image not selected')
+                    return redirect(request.url)
+                if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
+                    product_type = request.form["type"]
+                    country = request.form["country"]
+                    denomination = request.form["denomination"]
+                    year = request.form["year"]
+                    composition = request.form["composition"]
+                    description = request.form["description"]
+                    # obverse_image_url = uploadCollectionItem(obverse_image)
+                    # reverse_image_url = uploadCollectionItem(reverse_image)
+                    obverse_image_url = "fake.com"
+                    reverse_image_url = "fake2.com"
+                    new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
+                    db.session.add(new_item)
+                    db.session.commit()
+                    flash("Item added successfully")
+            items = collection_items.query.filter_by(email = session["email"])
+            return render_template("app/add_item.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True)
+        else:
+            flash("Only admin users can go to this page")
+            return redirect(url_for("account"))
     else:
-        flash("You're not logged in. Please type your email and password or create a new account.")
+        flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
 
 @app.route("/collection", methods=["POST", "GET"])
 def collection():
     if "name" in session:
-        items = collection_items.query.filter_by(email = session["email"])
-        return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], items = items)
+        if session["is_admin"] == True:
+            items = collection_items.query.filter_by(email = session["email"])
+            return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True)
+        else:
+            flash("Only admin users can go to this page")
+            return redirect(url_for("account"))
     else:
-        flash("You're not logged in. Please type your email and password or create a new account.")
+        flash("You're not logged in. Please log in or create an acocunt.")
+        return redirect(url_for("login"))
+
+@app.route("/about_me", methods=["POST", "GET"])
+def about_me():
+    if "name" in session:
+        if session["is_admin"] == True:
+            return render_template("app/about_me.html",  name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
+        else:
+            flash("Only admin users can go to this page")
+            return redirect(url_for("account"))
+    else:
+        flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
 
 @app.route("/view/users")

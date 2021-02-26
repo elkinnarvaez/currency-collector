@@ -6,37 +6,42 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/account">My Account</a>
+                        <a class="nav-link" href="/account">Mi cuenta</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/collection">My Collection</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/add_item">Add new item</a>
-                    </li>
+                    {% if is_admin == True %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/collection">Mi colección</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/add_item">Agregar a colección</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about_me">Acerca de mí</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
     </div>
 
-    <div class="w3-col m3 profile">
+    <div class="w3-col m3 profile" style="width: 26%;">
         <!-- Profile -->
         <div class="w3-card w3-round w3-white">
             <div class="w3-container">
                 <!-- <h4 style="position: relative; left: 10%;" style="position: relative; left: 10%;">My Profile</h4> -->
                 <br>
                 <!-- <p style="position: relative; left: 10%;"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                <p style="position: relative; left: 10%;"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-                <!-- <p style="position: relative; left: 10%;"><img src="" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
+                <!-- <p style="position: relative; left: 10%;"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
+                <p class="w3-center"><img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
                 <form enctype=multipart/form-data method="post">
-                    <input type="file" name="file" style="position: relative; left: 10%;"/>
+                    <input type="file" name="file" style="position: relative; left: 15%;"/>
                     <br>
                     <br>
-                    <input type="submit" value="Change picture" name="change_picture" style="position: relative; left: 10%;"/>
+                    <input type="submit" value="Cambiar imagen" name="change_picture" style="position: relative; left: 30%;"/>
                 </form>
                 <br>
                 <p style="position: relative; left: 10%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
-                <div style="position: relative; left: 10%;" class="messages">
+                <div class="messages-account">
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             {% for msg in messages %}

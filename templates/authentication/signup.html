@@ -4,33 +4,39 @@
     <div class="container">
         <section id="content">
         <form action="#" method="post">
-            <h1>Sign up</h1>
+            <h1>Registrarse</h1>
             <div>
-                <input type="text" name="name" placeholder="Name" required="" id="username" />
+                <input type="text" name="name" placeholder="Nombre" required="" id="username" />
             </div>
             <div>
                 <input type="text" name="email" placeholder="Email" required="" id="username" />
             </div>
             <div>
-                <input type="password" name="password" placeholder="Password" required="" id="password" />
+                <input type="password" name="password" placeholder="Contraseña" required="" id="password" />
             </div>
             <div>
-                <input type="password" name="confirmed_password" placeholder="Confirm password" required="" id="password" />
+                <input type="password" name="confirmed_password" placeholder="Confirmar contraseña" required="" id="password" />
             </div>
             <div>
-            <input type="submit" value="Sign up" />
-            <a href="/login">Already have an account?</a>
+            <input type="submit" value="Registrarse" />
+            <a href="/login">¿Ya tienes una cuenta?</a>
             </div>
         </form>
         </section>
     </div>
-    <div class="messages">
+    <div class="messages-sign-up">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                {% for msg in messages %}
-                    <p>{{msg}}</p>
-                {% endfor %}
+                <ul>
+                    {% for msg in messages %}
+                        <li>{{msg}}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         {% endwith %}
+    </div>
+    <br>
+    <div class="go-to-main-page">
+        <a href="/">Ir a la página de inicio</a>
     </div>
 {% endblock %}

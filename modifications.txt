@@ -6,4 +6,4 @@
 6. Descomentar línea 30 y 31 del archivo collection.html y comentar las líneas 28 y 29. *
 7. Descomentar línea 44 y 45 del archivo collection.html y comentar las líneas 42 y 43. *
 8. Descomentar lineas donde se muestran las publicaciones de otros usuarios en el archivo home.html: para mostrar la foto del publicante como también las imagenes del item publicado. *
-8. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección. *
+9. Descomentar todo el proceso de guardado en las bases de datos cuando se agrega un nuevo elemento a la colección y cuando se actualiza la foto de perfil en main.py. *

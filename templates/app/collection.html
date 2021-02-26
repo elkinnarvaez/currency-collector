@@ -6,13 +6,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/account">My Account</a>
+                        <a class="nav-link" href="/account">Mi cuenta</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/collection">My Collection</a>
+                        <a class="nav-link" href="/collection">Mi colección</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/add_item">Add new item</a>
+                        <a class="nav-link" href="/add_item">Agregar a colección</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about_me">Acerca de mí</a>
                     </li>
                 </ul>
             </div>
@@ -22,13 +25,13 @@
         <div class="w3-card w3-round w3-light-gray">
             <div class="w3-container items-list">
                 {% for item in items %}
-                    {% if item.product_type == "Coin" %}
+                    {% if item.product_type == "Moneda" %}
                         <div class="item-coin w3-container w3-white w3-round w3-card">
                             <div class="images_container">
-                                <!-- <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}"> -->
-                                <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
-                                <img class = "reverse_side_coin" src="{{item.reverse_image_path}}">
+                                <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
+                                <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
+                                <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
                             </div>
                             <div class = "item_information">
                                 <p>{{item.country}} - {{item.denomination}}</p>
@@ -37,10 +40,10 @@
                     {% else %}
                         <div class="item-bill w3-container w3-white w3-round w3-card">
                             <div class="images_container">
-                                <!-- <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}"> -->
-                                <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
-                                <img class = "reverse_side_bill" src="{{item.reverse_image_path}}">
+                                <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
+                                <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
+                                <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
                             </div>
                             <div class = "item_information">
                                 <p>{{item.country}} - {{item.denomination}}</p>
