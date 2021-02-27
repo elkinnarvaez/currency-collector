@@ -363,6 +363,25 @@ def about_me():
         flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
 
+@app.route("/modify_about_me", methods=["POST", "GET"])
+def modify_about_me():
+    if "name" in session:
+        if session["is_admin"] == True:
+            if request.method == "POST":
+                new_about_me_text = request.form["modified_description"]
+                session["about_me_text"] = new_about_me_text
+                user = users.query.filter_by(email = session["email"]).first()
+                user.about_me_text = session["about_me_text"]
+                db.session.commit()
+                return redirect(url_for("about_me"))
+            return render_template("app/modify_about_me.html",  name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], about_me_text = session["about_me_text"], logged_in = True)
+        else:
+            flash("Only admin users can go to this page")
+            return redirect(url_for("account"))
+    else:
+        flash("You're not logged in. Please log in or create an acocunt.")
+        return redirect(url_for("login")) 
+
 @app.route("/add_collector", methods=["POST", "GET"])
 def add_collector():
     if "name" in session:
@@ -404,6 +423,7 @@ def view_collectors():
         session["clicked_user_profile_picture_path"] = clicked_user.profile_picture_path
         session["clicked_user_num_item"] = clicked_user.num_item
         session["clicked_user_is_admin"] = clicked_user.is_admin
+        session["clicked_user_about_me_text"] = clicked_user.about_me_text
         return redirect(url_for("about_user"))
     users_objects = list(users.query.filter(True))
     admin_users  = list()
@@ -418,17 +438,17 @@ def view_collectors():
 @app.route("/about_user", methods=["POST", "GET"])
 def about_user():
     if "name" in session:
-        return render_template("app/about_user.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"])
+        return render_template("app/about_user.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"])
     else:
-        return render_template("app/about_user.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"])
+        return render_template("app/about_user.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"])
 
 @app.route("/user_collection", methods=["POST", "GET"])
 def user_collection():
     clicked_user_items = collection_items.query.filter_by(email = session["clicked_user_email"])
     if "name" in session:
-        return render_template("app/user_collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_items = clicked_user_items)
+        return render_template("app/user_collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
     else:
-        return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_items = clicked_user_items)
+        return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
 
 @app.route("/view/users")
 def view():

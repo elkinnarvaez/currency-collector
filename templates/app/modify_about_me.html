@@ -1,5 +1,5 @@
 {% extends "app/base.html" %}
-{% block title %}About me{% endblock %}
+{% block title %}Modify About Me{% endblock %}
 {% block content %}
     <div class="my_account">
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(73, 92, 105);">
@@ -42,17 +42,15 @@
         <br>
     </div>
 
-    <div class="about-me-container">
-        <h3>Acerca de mí</h3>
-        <hr>
-        <div style="margin:1%; white-space: pre-line;">
-            {{about_me_text}}
+    <form method="post">
+        <div class="about-me-container">
+            <h3>Acerca de mí</h3>
+            <hr>
+            <textarea class="text-area-container" name="modified_description">{{about_me_text}}</textarea>
         </div>
-    </div>
-    
-    <div class="modify_description">
-        <form action="/modify_about_me">
-            <input type="submit" class="w3-button w3-theme-d1 w3-margin-bottom" value="Modificar descripción">
-        </form>
-    </div>
+        
+        <div class="modify_description_save_changes">
+                <input type="submit" class="w3-button w3-theme-d1 w3-margin-bottom" value="Save changes">
+        </div>
+    </form>
 {% endblock %}
