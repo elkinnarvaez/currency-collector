@@ -18,6 +18,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/about_me">Acerca de mí</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/add_collector">Agregar nuevo coleccionista</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -41,20 +44,68 @@
                 </form>
                 <br>
                 <p style="position: relative; left: 10%;"><small>Recomended resolution: 2100 pixels x 2100 pixels</small></p>
-                <div class="messages-account">
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            {% for msg in messages %}
-                                <p>{{msg}}</p>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
-                </div>
+                {% if flash_messages_view == 1 %}
+                    <div class="messages-account">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for msg in messages %}
+                                    <p>{{msg}}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endif %}
                 <hr>
                 <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
                 <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
             </div>
         </div>
         <br>
+    </div>
+
+    <div class="change_data_container">
+        <div class="w3-card w3-round w3-white">
+            <div class="w3-container">
+                <h3>Cambia los datos de tu perfil</h3>
+                <hr>
+                <p style="color:#00011a80;">El campo de contraseña actual es obligatorio para cambiar el nombre de usuario y contraseña. Si no quieres modificar la contraseña puedes dejar los campos en blanco.</p>
+                <div class="form_change_data">
+                    <form method="post">
+                        <label>Nombre:</label>
+                        <input type="text" name="name">
+                        <br>
+                        <br>
+                        <label>Contraseña actual:</label>
+                        <input type="password" name="old_password">
+                        <br>
+                        <br>
+                        <label>Nueva contraseña:</label>
+                        <input type="password" name="new_password">
+                        <br>
+                        <br>
+                        <label>Confirme nueva contraseña:</label>
+                        <input type="password" name="confirmed_new_password">
+                        <br>
+                        <br>
+                        <br>
+                        <input type="submit" value="Modificar" name="change_data" style="position: relative; left:40%;">
+                    </form>
+                </div>
+                <br>
+                {% if flash_messages_view == 2 %}
+                    <div class="messages-change-data">
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for msg in messages %}
+                                    <ul>
+                                        <li>{{msg}}</li>
+                                    </ul>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}

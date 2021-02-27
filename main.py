@@ -219,30 +219,72 @@ def signup():
 
 @app.route("/account", methods=["POST", "GET"])
 def account():
+    flash_messages_view = 1
     if "name" in session:
         if request.method == "POST":
-            # check if the post request has the file part
-            if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
-                # filename = secure_filename(file.filename)
-                # new_file_name = session["email"] + "." + filename.rsplit('.', 1)[1].lower()
-                # file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
-                # flash("Picture changed succesfully.")
-                # session["profile_picture_path"] = "app/images/user_profile_pictures/" + new_file_name
-                # user = users.query.filter_by(email = session["email"]).first()
-                # user.profile_picture_path = session["profile_picture_path"]
-                # db.session.commit()
-                # uploadProfilePicture(file)
-                flash("Picture changed succesfully.")
-        return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
+            if request.form.get("change_picture"):
+                # check if the post request has the file part
+                if 'file' not in request.files:
+                    flash('No file part')
+                    return redirect(request.url)
+                file = request.files['file']
+                # if user does not select file, browser also
+                # submit an empty part without filename
+                if file.filename == '':
+                    flash('No selected file')
+                    return redirect(request.url)
+                if file and allowed_file(file.filename):
+                    # filename = secure_filename(file.filename)
+                    # new_file_name = session["email"] + "." + filename.rsplit('.', 1)[1].lower()
+                    # file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_name))
+                    # flash("Picture changed succesfully.")
+                    # session["profile_picture_path"] = "app/images/user_profile_pictures/" + new_file_name
+                    # user = users.query.filter_by(email = session["email"]).first()
+                    # user.profile_picture_path = session["profile_picture_path"]
+                    # db.session.commit()
+                    # uploadProfilePicture(file)
+                    flash("Picture changed successfully.")
+                flash_messages_view = 1
+            elif request.form.get("change_data"):
+                new_name = request.form["name"]
+                old_password = request.form["old_password"]
+                new_password = request.form["new_password"]
+                confirmed_new_password = request.form["confirmed_new_password"]
+                current_flag = False
+                if(new_name != ""):
+                    if(old_password != ""):
+                        if(session["password"] == old_password):
+                            session["name"] = new_name
+                            user = users.query.filter_by(email = session["email"]).first()
+                            user.name = session["name"]
+                            db.session.commit()
+                            flash("Profile name changed successfully")
+                        else:
+                            flash("Incorrect current password. Please try again.")
+                            current_flag = True
+                    else:
+                        flash("You need to type your current password in order to update your profile name")
+                if(new_password != ""):
+                    if(confirmed_new_password != ""):
+                        if(old_password != ""):
+                            if(new_password == confirmed_new_password):
+                                if(session["password"] == old_password):
+                                    session["password"] = new_password
+                                    user = users.query.filter_by(email = session["email"]).first()
+                                    user.password = session["password"]
+                                    db.session.commit()
+                                    flash("Password changed successfully")
+                                else:
+                                    if(current_flag == False):
+                                      flash("Incorrect current password. Please try again.")  
+                            else:
+                                flash("Passwords don't match")
+                        else:
+                            flash("You need to type your current password in order to change it")
+                    else:
+                        flash("You need to retype your password. Please try again.")
+                flash_messages_view = 2
+        return render_template("app/account.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, flash_messages_view = flash_messages_view)
     else:
         flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
@@ -317,6 +359,49 @@ def about_me():
     else:
         flash("You're not logged in. Please log in or create an acocunt.")
         return redirect(url_for("login"))
+
+@app.route("/add_collector", methods=["POST", "GET"])
+def add_collector():
+    if "name" in session:
+        if session["is_admin"] == True:
+            if request.method == "POST":
+                f_name = request.form["name"]
+                f_email = request.form["email"]
+                f_password = request.form["password"]
+                f_confirmed_password = request.form["confirmed_password"]
+                user = users.query.filter_by(email = f_email).first()
+                add_user = True
+                if user != None:
+                    flash("User already exists. Try using a different email.")
+                    add_user = False
+                if(f_password != f_confirmed_password):
+                    flash("Passwords don't match")
+                    add_user = False
+                if(add_user):
+                    #new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
+                    new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0, True)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    flash("User added successfully")
+            return render_template("app/add_collector.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
+        else:
+            flash("Only admin users can go to this page")
+            return redirect(url_for("account"))
+    else:
+        flash("You're not logged in. Please log in or create an acocunt.")
+        return redirect(url_for("login"))
+
+@app.route("/view_collectors", methods=["POST", "GET"])
+def view_collectors():
+    users_objects = list(users.query.filter(True))
+    admin_users  = list()
+    for usr in users_objects:
+        if usr.is_admin == True:
+            admin_users.append(usr)
+    if "name" in session:
+        return render_template("app/view_collectors.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], admin_users = admin_users, logged_in = True)
+    else:
+        return render_template("app/view_collectors.html", name = None, email = None, profile_picture_path = None, is_admin = False, admin_users = admin_users, logged_in = False)
 
 @app.route("/view/users")
 def view():

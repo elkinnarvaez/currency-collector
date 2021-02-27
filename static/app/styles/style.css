@@ -152,6 +152,10 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     width: 30%;
 }
 
+.collectors-list-super-container{
+    width: 30%;
+}
+
 .publication_container{
     display: flex;
     flex-direction: column;
@@ -199,4 +203,44 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     flex-wrap: wrap;
     position: relative;
     width: 100%;
+}
+
+.collectors-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+}
+
+.change_data_container{
+    position: absolute;
+    top: 23%;
+    left: 35%;
+    width: 46%;
+    height: 71%;
+}
+
+.add-new-collector{
+    position: absolute;
+    top: 23%;
+    left: 30%;
+    width: 40%; 
+}
+
+.add-collector-info label{
+    display: inline-block;
+    width: 40%;
+    text-align: right;
+}
+
+.add-collector-messages{
+    position: relative;
+    left: 18%;
+}
+
+.form_change_data label{
+    display: inline-block;
+    width: 35%;
+    text-align: right;  
 }

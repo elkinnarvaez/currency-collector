@@ -1,0 +1,69 @@
+{% extends "app/base.html" %}
+{% block title %}Add item to collection{% endblock %}
+{% block content %}
+    <div class="my_account">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(73, 92, 105);">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">Mi cuenta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/collection">Mi colección</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_item">Agregar a colección</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about_me">Acerca de mí</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_collector">Agregar nuevo coleccionista</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="add-new-collector">
+        <div class="w3-card w3-round w3-white">
+            <div class="w3-container">
+                <h3>Agrega un nuevo coleccionista</h3>
+                <hr>
+                <div class="add-collector-info">
+                    <form method="post">
+                        <label>Nombre:</label>
+                        <input type="text" name="name" placeholder="">
+                        <br>
+                        <br>
+                        <label>Email:</label>
+                        <input type="text" name="email" placeholder="">
+                        <br>
+                        <br>
+                        <label>Contraseña:</label>
+                        <input type="password" name="password" placeholder="">
+                        <br>
+                        <br>
+                        <label>Confirmar contraseña:</label>
+                        <input type="password" name="confirmed_password" placeholder="">
+                        <br>
+                        <br>
+                        <input type="submit" value="Agregar" name="upload" style="position: relative; left:44%;">
+                    </form>
+                </div>
+                <br>
+            </div>
+        </div>
+        <br>
+        <div class = "add-collector-messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <lu>
+                    {% for msg in messages %}
+                        <li>{{msg}}</li>
+                    {% endfor %}
+                    </lu>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

@@ -17,6 +17,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/about_me">Acerca de mí</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_collector">Agregar nuevo coleccionista</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -24,7 +27,7 @@
     <div class="w3-col m3 profile" style="width: 35%;">
         <div class="w3-card w3-round w3-white">
             <div class="w3-container">
-                <h3>Agrega un nuevo elemento a tu colección:</h3>
+                <h3>Agrega un nuevo elemento a tu colección</h3>
                 <hr>
                 <div class="add-item">
                     <form enctype=multipart/form-data method="post">
@@ -74,7 +77,7 @@
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for msg in messages %}
-                        {{msg}}
+                        <p>{{msg}}</p>
                     {% endfor %}
                 {% endif %}
             {% endwith %}

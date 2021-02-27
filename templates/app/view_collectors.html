@@ -1,0 +1,28 @@
+{% extends "app/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+        <!-- The Grid -->
+        <div class="w3-row">
+            <!-- Middle Column -->
+            <div class="collectors-list">
+                {% for usr in admin_users %}
+                    {% set admin_user_name = usr.name %}
+                    {% set admin_user_profile_picture_path = usr.profile_picture_path %}
+                    <div class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-bottom collectors-list-super-container"><br>
+                        <!-- <img src={{admin_user_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> -->
+                        <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                        <h4>{{admin_user_name}}</h4>
+                        <br>
+                        <br>
+                        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i></i> Ver perfil</button> 
+                    </div>
+                {% endfor %}
+            <!-- End Middle Column -->
+            </div>
+        <!-- End Grid -->
+        </div>
+    <!-- End Page Container -->
+    </div>
+{% endblock %}
