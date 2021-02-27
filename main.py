@@ -245,7 +245,7 @@ def account():
                     # user = users.query.filter_by(email = session["email"]).first()
                     # user.profile_picture_path = session["profile_picture_path"]
                     # db.session.commit()
-                    # uploadProfilePicture(file)
+                    uploadProfilePicture(file) # This line need to be uncommented
                     flash("Picture changed successfully.")
                 flash_messages_view = 1
             elif request.form.get("change_data"):
@@ -321,10 +321,10 @@ def add_item():
                     year = request.form["year"]
                     composition = request.form["composition"]
                     description = request.form["description"]
-                    # obverse_image_url = uploadCollectionItem(obverse_image)
-                    # reverse_image_url = uploadCollectionItem(reverse_image)
-                    obverse_image_url = "fake.com"
-                    reverse_image_url = "fake2.com"
+                    obverse_image_url = uploadCollectionItem(obverse_image) # This line need to be uncommented
+                    reverse_image_url = uploadCollectionItem(reverse_image) # This line need to be uncommented
+                    # obverse_image_url = "fake.com" # This line need to be commented
+                    # reverse_image_url = "fake2.com" # This line need to be commented
                     new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
                     db.session.add(new_item)
                     db.session.commit()
