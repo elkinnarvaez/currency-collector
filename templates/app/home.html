@@ -53,17 +53,22 @@
                                         <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
                                     </div>
+                                    <div class = "publication_description" style="margin-top: 10px;">
+                                        <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
+                                    </div>
                                 {% else %}
-                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
+                                    <div class="images_container" style="top:30px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
                                         <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
                                         <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
                                         <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
                                     </div>
+                                    <div class = "publication_description" style="position:relative; top:30px; margin-top: 10px;">
+                                        <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
+                                    </div>
+                                    <br>
+                                    <br>
                                 {% endif %}
-                                <div class = "publication_description">
-                                    <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
-                                </div>
                             </div>
                             <br>
                             <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
@@ -100,17 +105,22 @@
                                         <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
                                     </div>
+                                    <div class = "publication_description" style="margin-top: 10px;">
+                                        <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
+                                    </div>
                                 {% else %}
-                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
+                                    <div class="images_container" style="top:30px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
                                         <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
                                         <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
                                         <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
                                     </div>
+                                    <div class = "publication_description" style="position:relative; top:30px; margin-top: 10px;">
+                                        <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
+                                    </div>
+                                    <br>
+                                    <br>
                                 {% endif %}
-                                <div class = "publication_description">
-                                    <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
-                                </div>
                             </div>
                             <br>
                             <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> Me gusta</button> 

@@ -1,0 +1,19 @@
+{% extends "app/base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+    <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+        <div class="w3-row">
+            <form method="post">
+                <input type="text" class="search_text" name="search" placeholder="Pais, tipo, año, denominación, palabras clave...">
+                <button type="submit" class="search_button"><i class="fa fa-search w3-xlarge"></i></button>
+            </form>
+            <div class="country-groups">
+                <button type="submit" class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-bottom button-country-group-super-container">
+
+                </button>
+            </div>
+        </div>
+    <!-- End Page Container -->
+    </div>
+{% endblock %}

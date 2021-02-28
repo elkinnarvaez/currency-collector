@@ -321,3 +321,31 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     right: 5%;
     max-width: 30%;
 }
+
+.search_text{
+    width: 80%;
+    height: 60px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    font-size: 20px;
+    background: #f1f1f1;
+    border: 1px solid grey;
+}
+
+.search_button{
+    width: 5%;
+    height: 60px;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+}
+
+.button-country-group-super-container{
+    border: none;
+    background-color: unset;
+    width: 30%;
+}

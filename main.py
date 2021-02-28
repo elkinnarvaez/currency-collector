@@ -450,6 +450,15 @@ def user_collection():
     else:
         return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
 
+@app.route("/search", methods=["POST", "GET"])
+def search():
+    if request.method == "POST":
+        print("Holaaa")
+    if "name" in session:
+        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
+    else:
+        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False)
+
 @app.route("/view/users")
 def view():
     return render_template("app/users.html", users = users.query.all())
