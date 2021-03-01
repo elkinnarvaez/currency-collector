@@ -4,14 +4,44 @@
     <!-- Page Container -->
     <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
         <div class="w3-row">
-            <form method="post">
-                <input type="text" class="search_text" name="search" placeholder="Pais, tipo, año, denominación, palabras clave...">
-                <button type="submit" class="search_button"><i class="fa fa-search w3-xlarge"></i></button>
-            </form>
+            <div class="search-container">
+                <form method="post">
+                    <input type="text" class="search_text" name="search" placeholder="Pais, tipo, año, denominación, palabras clave...">
+                    <button type="submit" class="search_button"><i class="fa fa-search w3-xlarge"></i></button>
+                </form>
+            </div>
+            <div class="search-selection-bar">
+                <nav class="navbar navbar-expand-lg navbar-light w3-light-gray">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                      <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Paises</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#">Destacados</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </nav>
+            </div>
             <div class="country-groups">
-                <button type="submit" class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-bottom button-country-group-super-container">
-
-                </button>
+                <div class="country-list">
+                    {% for item in country_items %}
+                        <button type="submit" class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-top button-country-group-super-container">
+                            {% if item.product_type == "Moneda" %}
+                                <img class="obverse_side_coin_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                <!-- <img class="obverse_side_coin_search" src="{{item.obverse_image_path}}"> -->
+                            {% else %}
+                                <img class="obverse_side_bill_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                <!-- <img class="obverse_side_bill_search" src="{{item.obverse_image_path}}"> --> 
+                            {% endif %}
+                            <p><b>{{item.country}}</b></p>
+                        </button>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     <!-- End Page Container -->

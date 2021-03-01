@@ -7,14 +7,14 @@
         <div class="w3-row">
             <!-- Left Column -->
             {% if logged_in == True %}
-                <div class="w3-col m3" style="position: fixed;">
+                <div class="w3-col" style="position: fixed; width: 20%;">
                     <!-- Profile -->
                     <div class="w3-card w3-round w3-white">
                         <div class="w3-container">
                             <h4 class="w3-center">Mi perfil</h4>
                             <!-- <p class="w3-center"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                            <!-- <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                            <p class="w3-center"><img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="width:180px" alt="Avatar"></p>
+                            <!-- <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="width:180px;" alt="Avatar"></p> -->
+                            <p class="w3-center"><img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="width:180px;" alt="Avatar"></p>
                             <hr>
                             <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
                             <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
@@ -32,10 +32,10 @@
                         {% set item_owner_name = user_objects[item.email].name %}
                         {% set item_owner_profile_picture_path = user_objects[item.email].profile_picture_path %}
                         <div class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-bottom publication_super_container"><br>
-                            <!-- <img src={{item_owner_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> -->
-                            <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                            <!-- <img src={{item_owner_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px;"> -->
+                            <!-- <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px;">
                             <h4>{{item_owner_name}}</h4><br>
-                            <hr class="w3-clear">
+                            <hr class="w3-clear"> -->
                             <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                             <div class="w3-row-padding" style="margin:0 -16px">
                                 <div class="w3-half">
@@ -50,24 +50,22 @@
                                     <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
                                         <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
                                         <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
-                                        <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
+                                        <!-- <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
                                     <div class = "publication_description" style="margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% else %}
-                                    <div class="images_container" style="top:30px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
-                                        <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                        <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
-                                        <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
+                                        <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
+                                        <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
-                                    <div class = "publication_description" style="position:relative; top:30px; margin-top: 10px;">
+                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
-                                    <br>
-                                    <br>
                                 {% endif %}
                             </div>
                             <br>
@@ -85,9 +83,9 @@
                         {% set item_owner_profile_picture_path = user_objects[item.email].profile_picture_path %}
                         <div class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-bottom publication_super_container_unlogged"><br>
                             <!-- <img src={{item_owner_profile_picture_path}} alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> -->
-                            <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                            <!-- <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
                             <h4>{{item_owner_name}}</h4><br>
-                            <hr class="w3-clear">
+                            <hr class="w3-clear"> -->
                             <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                             <div class="w3-row-padding" style="margin:0 -16px">
                                 <div class="w3-half">
@@ -102,24 +100,22 @@
                                     <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
                                         <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
                                         <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
-                                        <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
+                                        <!-- <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
                                     <div class = "publication_description" style="margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% else %}
-                                    <div class="images_container" style="top:30px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
-                                        <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                        <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
-                                        <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}">
+                                        <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
+                                        <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
-                                    <div class = "publication_description" style="position:relative; top:30px; margin-top: 10px;">
+                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
-                                    <br>
-                                    <br>
                                 {% endif %}
                             </div>
                             <br>

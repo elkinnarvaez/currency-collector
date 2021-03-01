@@ -132,7 +132,7 @@ def add_header(response):
 
 @app.route("/")
 def start():
-    return redirect(url_for("home"))
+    return redirect(url_for("search"))
 
 @app.route("/home/")
 def home():
@@ -454,10 +454,17 @@ def user_collection():
 def search():
     if request.method == "POST":
         print("Holaaa")
+    items = collection_items.query.filter(True)
+    country_items = list()
+    used = set()
+    for item in items:
+        if item.country not in used:
+            country_items.append(item)
+            used.add(item.country)
     if "name" in session:
-        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True)
+        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, country_items = country_items)
     else:
-        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False)
+        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, country_items = country_items)
 
 @app.route("/view/users")
 def view():
