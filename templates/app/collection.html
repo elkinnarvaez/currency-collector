@@ -31,8 +31,8 @@
                     {% if item.product_type == "Moneda" %}
                         <div class="item-coin w3-container w3-white w3-round w3-card">
                             <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{name}}|{{profile_picture_path}}">
-                                <img class = "obverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                <img class = "reverse_side_coin" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
+                                <img class = "obverse_side_coin_collection" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                <img class = "reverse_side_coin_collection" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
                                 <!-- <img class = "obverse_side_coin" src="{{item.obverse_image_path}}">
                                 <img class = "reverse_side_coin" src="{{item.reverse_image_path}}"> -->
                             </div>
@@ -43,8 +43,8 @@
                     {% else %}
                         <div class="item-bill w3-container w3-white w3-round w3-card">
                             <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{name}}|{{profile_picture_path}}">
-                                <img class = "obverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                <img class = "reverse_side_bill" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
+                                <img class = "obverse_side_bill_collection" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                <img class = "reverse_side_bill_collection" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
                                 <!-- <img class = "obverse_side_bill" src="{{item.obverse_image_path}}">
                                 <img class = "reverse_side_bill" src="{{item.reverse_image_path}}"> -->
                             </div>

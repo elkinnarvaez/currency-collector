@@ -450,10 +450,11 @@ def user_collection():
     else:
         return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
 
-@app.route("/search", methods=["POST", "GET"])
+@app.route("/countries", methods=["POST", "GET"])
 def search():
     if request.method == "POST":
-        print("Holaaa")
+        session["clicked_country"] = list(request.form.keys())[0]
+        return redirect(url_for("country", country_name = session["clicked_country"]))
     items = collection_items.query.filter(True)
     country_items = list()
     used = set()
@@ -462,9 +463,17 @@ def search():
             country_items.append(item)
             used.add(item.country)
     if "name" in session:
-        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, country_items = country_items)
+        return render_template("app/countries.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, country_items = country_items)
     else:
-        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, country_items = country_items)
+        return render_template("app/countries.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, country_items = country_items)
+
+@app.route("/country/<country_name>", methods=["POST", "GET"])
+def country(country_name):
+    items = collection_items.query.filter(collection_items.country == session["clicked_country"])
+    if "name" in session:
+        return render_template("app/country.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items)
+    else:
+        return render_template("app/country.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items)
 
 @app.route("/view/users")
 def view():
