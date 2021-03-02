@@ -2,12 +2,12 @@
 {% block title %}Home{% endblock %}
 {% block content %}
     <!-- Page Container -->
-    <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+    <div class="w3-container w3-content" style="max-width:95%;margin-top:80px">    
         <!-- The Grid -->
         <div class="w3-row">
             <!-- Left Column -->
             {% if logged_in == True %}
-                <div class="w3-col" style="position: fixed; width: 20%;">
+                <div class="w3-col" style="position: fixed; width: 380px;">
                     <!-- Profile -->
                     <div class="w3-card w3-round w3-white">
                         <div class="w3-container">
@@ -63,14 +63,19 @@
                                         <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
-                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 10px;">
+                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 25px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% endif %}
                             </div>
-                            <br>
-                            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
-                            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                            <form method="post">
+                                {% if item._id in user_likes %}
+                                    <button type="submit" class="w3-button w3-round w3-theme-d5 w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
+                                {% else %}
+                                    <button type="submit" class="w3-button w3-round w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
+                                {% endif %}
+                                <button type="submit" class="w3-button w3-round w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                            </form>
                         </div>
                     {% endfor %}
                 <!-- End Middle Column -->
@@ -113,14 +118,19 @@
                                         <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
                                         <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
                                     </div>
-                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 10px;">
+                                    <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 26px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% endif %}
                             </div>
-                            <br>
-                            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
-                            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                            <form method="post">
+                                {% if item._id in user_likes %}
+                                    <button type="submit" class="w3-button w3-round w3-theme-d5 w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
+                                {% else %}
+                                    <button type="submit" class="w3-button w3-round w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
+                                {% endif %}
+                                <button type="submit" class="w3-button w3-round w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                            </form>
                         </div>
                     {% endfor %}
                 <!-- End Middle Column -->

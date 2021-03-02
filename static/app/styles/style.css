@@ -110,11 +110,20 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     opacity: 1;
 }
 
+.images_container:hover .reverse_side_bill_collection{
+    opacity: 1;
+}
+
+
 .images_container:hover .reverse_side_coin{
     opacity: 1;
 }
 
 .images_container:hover .reverse_side_coin_pub{
+    opacity: 1;
+}
+
+.images_container:hover .reverse_side_coin_collection{
     opacity: 1;
 }
 
@@ -221,11 +230,11 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 }
 
 .publication_super_container{
-    width: 45%;
+    width: 415px;
 }
 
 .publication_super_container_unlogged{
-    width: 30%;
+    width: 400px;
 }
 
 .collectors-list-super-container{
@@ -269,7 +278,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     flex-direction: row;
     flex-wrap: wrap;
     position: relative;
-    left: 28%;
+    left: 400px;
     width: 75%;
 }
 

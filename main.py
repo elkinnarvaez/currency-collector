@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os, json, boto3, psycopg2
 from werkzeug.utils import secure_filename
 import requests
+import datetime
 
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -51,8 +52,11 @@ class collection_items(db.Model):
     obverse_image_path = db.Column(db.String(800))
     reverse_image_path = db.Column(db.String(800))
     email = db.Column(db.String(100))
+    is_featured = db.Column(db.Boolean)
+    num_views = db.Column(db.Integer)
+    date = db.Column(db.Date)
 
-    def __init__(self, product_type, country, denomination, year, composition, description, obverse_image_path, reverse_image_path, email):
+    def __init__(self, product_type, country, denomination, year, composition, description, obverse_image_path, reverse_image_path, email, is_featured, num_views, date):
         self.product_type = product_type
         self.country = country
         self.denomination = denomination
@@ -62,7 +66,29 @@ class collection_items(db.Model):
         self.obverse_image_path = obverse_image_path
         self.reverse_image_path = reverse_image_path
         self.email = email
+        self.is_featured = is_featured
+        self.num_views = num_views
+        self.date = date
 
+class likes(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    user_email = db.Column(db.String(100))
+
+    def __init__(self, item_id, user_email):
+        self.item_id = item_id
+        self.user_email = user_email
+
+class comments(db.Model):
+    _id = db.Column("id", db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    user_email = db.Column(db.String(100))
+    comment_text = db.Column(db.Text)
+
+    def __init__(self, item_id, user_email, comment_text):
+        self.item_id = item_id
+        self.user_email = user_email
+        self.comment_text = comment_text
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -218,8 +244,22 @@ def add_header(response):
 def start():
     return redirect(url_for("countries"))
 
-@app.route("/home/")
+@app.route("/home/", methods=["POST", "GET"])
 def home():
+    if request.method == "POST":
+        if "name" not in session:
+            flash("You need to login in order to react or comment to a post")
+            return redirect(url_for("login"))
+        else:
+            item_id = int(list(request.form.keys())[0])
+            like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+            if like == None:
+                new_like = likes(item_id, session["email"])
+                db.session.add(new_like)
+                db.session.commit()
+            else:
+                db.session.delete(like)
+                db.session.commit()
     # items = list(collection_items.query.filter(collection_items.email != session["email"]))
     items = list(collection_items.query.filter(True))
     user_objects = dict()
@@ -227,10 +267,14 @@ def home():
         if item.email not in user_objects:
             user = users.query.filter_by(email = item.email).first()
             user_objects[item.email] = user
+    user_likes = set()
     if "name" in session:
-        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, user_objects = user_objects, logged_in = True)
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/home.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, user_objects = user_objects, logged_in = True, user_likes = user_likes)
     else:
-        return render_template("app/home.html", name = None, email = None, profile_picture_path = None, is_admin = False, items = items, user_objects = user_objects, logged_in = False)
+        return render_template("app/home.html", name = None, email = None, profile_picture_path = None, is_admin = False, items = items, user_objects = user_objects, logged_in = False, user_likes = user_likes)
 
 @app.route("/logout/")
 def logout():
@@ -405,11 +449,12 @@ def add_item():
                     year = request.form["year"]
                     composition = request.form["composition"]
                     description = request.form["description"]
+                    is_featured = "featured" in request.form
                     # obverse_image_url = uploadCollectionItem(obverse_image) # This line needs to be uncommented
                     # reverse_image_url = uploadCollectionItem(reverse_image) # This line needs to be uncommented
                     obverse_image_url = "fake.com" # This line needs to be commented
                     reverse_image_url = "fake2.com" # This line needs to be commented
-                    new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"])
+                    new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
                     db.session.add(new_item)
                     db.session.commit()
                     flash("Item added successfully")
@@ -562,16 +607,32 @@ def country(country_name):
     global global_arg
     if request.method == "POST":
         if(list(request.form.keys())[0] != "search"):
-            pass
+            if "name" not in session:
+                flash("You need to login in order to react or comment to a post")
+                return redirect(url_for("login"))
+            else:
+                item_id = int(list(request.form.keys())[0])
+                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                if like == None:
+                    new_like = likes(item_id, session["email"])
+                    db.session.add(new_like)
+                    db.session.commit()
+                else:
+                    db.session.delete(like)
+                    db.session.commit()
         else:
             search_text = request.form["search"]
             global_arg = search_in_database(search_text)
             return redirect(url_for("search"))
     items = collection_items.query.filter(collection_items.country == session["clicked_country"])
+    user_likes = set()
     if "name" in session:
-        return render_template("app/country.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items, country_name = country_name)
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/country.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items, country_name = country_name, user_likes = user_likes)
     else:
-        return render_template("app/country.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items, country_name = country_name)
+        return render_template("app/country.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items, country_name = country_name, user_likes = user_likes)
 
 @app.route("/search/", methods=["POST", "GET"])
 def search():
@@ -580,14 +641,30 @@ def search():
         global_arg = list()
     if request.method == "POST":
         if(list(request.form.keys())[0] != "search"):
-            pass
+            if "name" not in session:
+                flash("You need to login in order to react or comment to a post")
+                return redirect(url_for("login"))
+            else:
+                item_id = int(list(request.form.keys())[0])
+                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                if like == None:
+                    new_like = likes(item_id, session["email"])
+                    db.session.add(new_like)
+                    db.session.commit()
+                else:
+                    db.session.delete(like)
+                    db.session.commit()
         else:
             search_text = request.form["search"]
             global_arg = search_in_database(search_text)
+    user_likes = set()
     if "name" in session:
-        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = global_arg)
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = global_arg, user_likes = user_likes)
     else:
-        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = global_arg)
+        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = global_arg, user_likes = user_likes)
 
 @app.route("/view/users")
 def view():
