@@ -9,6 +9,7 @@ import requests
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+global_arg = None
 app = Flask(__name__)
 app.secret_key = "secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -124,6 +125,89 @@ def uploadCollectionItem(file):
     db.session.commit()
     return url
 
+def computeLPSArray(pat, M, lps): 
+    len = 0 # length of the previous longest prefix suffix 
+  
+    lps[0] # lps[0] is always 0 
+    i = 1
+  
+    # the loop calculates lps[i] for i = 1 to M-1 
+    while i < M: 
+        if pat[i]== pat[len]: 
+            len += 1
+            lps[i] = len
+            i += 1
+        else: 
+            # This is tricky. Consider the example. 
+            # AAACAAAA and i = 7. The idea is similar  
+            # to search step. 
+            if len != 0: 
+                len = lps[len-1] 
+  
+                # Also, note that we do not increment i here 
+            else: 
+                lps[i] = 0
+                i += 1
+
+# Python program for KMP Algorithm 
+def KMPSearch(pat, txt):
+    M = len(pat) 
+    N = len(txt) 
+  
+    # create lps[] that will hold the longest prefix suffix  
+    # values for pattern 
+    lps = [0]*M 
+    j = 0 # index for pat[] 
+  
+    # Preprocess the pattern (calculate lps[] array) 
+    computeLPSArray(pat, M, lps) 
+  
+    i = 0 # index for txt[] 
+    while i < N: 
+        if pat[j] == txt[i]: 
+            i += 1
+            j += 1
+  
+        if j == M: 
+            return True
+  
+        # mismatch after j matches 
+        elif i < N and pat[j] != txt[i]: 
+            # Do not match lps[0..lps[j-1]] characters, 
+            # they will match anyway 
+            if j != 0: 
+                j = lps[j-1] 
+            else: 
+                i += 1
+    return False
+
+def search_in_database(search_text):
+    ans = list()
+    items = list(collection_items.query.filter(True))
+    key_words = list(map(lambda x: x.lower(), search_text.split()))
+    print(key_words)
+    for item in items:
+        added = False
+        for key_word in key_words:
+            if(key_word == "monedas"):
+                key_word = "moneda"
+            if(key_word == "billetes"):
+                key_word = "billete"
+            if(added):
+                break
+            if(KMPSearch(key_word, item.product_type.lower())):
+                ans.append(item); added = True
+            elif(KMPSearch(key_word, item.country.lower())):
+                ans.append(item); added = True
+            elif(KMPSearch(key_word, item.denomination.lower())):
+                ans.append(item); added = True
+            elif(KMPSearch(key_word, item.year.lower())):
+                ans.append(item); added = True
+            elif(KMPSearch(key_word, item.composition.lower())):
+                ans.append(item); added = True
+            elif(KMPSearch(key_word, item.description.lower())):
+                ans.append(item); added = True
+    return ans
 @app.after_request
 def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
@@ -132,7 +216,7 @@ def add_header(response):
 
 @app.route("/")
 def start():
-    return redirect(url_for("search"))
+    return redirect(url_for("countries"))
 
 @app.route("/home/")
 def home():
@@ -451,10 +535,16 @@ def user_collection():
         return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
 
 @app.route("/countries", methods=["POST", "GET"])
-def search():
+def countries():
+    global global_arg
     if request.method == "POST":
-        session["clicked_country"] = list(request.form.keys())[0]
-        return redirect(url_for("country", country_name = session["clicked_country"]))
+        if(list(request.form.keys())[0] != "search"):
+            session["clicked_country"] = list(request.form.keys())[0]
+            return redirect(url_for("country", country_name = session["clicked_country"]))
+        else:
+            search_text = request.form["search"]
+            global_arg = search_in_database(search_text)
+            return redirect(url_for("search"))
     items = collection_items.query.filter(True)
     country_items = list()
     used = set()
@@ -469,11 +559,35 @@ def search():
 
 @app.route("/country/<country_name>", methods=["POST", "GET"])
 def country(country_name):
+    global global_arg
+    if request.method == "POST":
+        if(list(request.form.keys())[0] != "search"):
+            pass
+        else:
+            search_text = request.form["search"]
+            global_arg = search_in_database(search_text)
+            return redirect(url_for("search"))
     items = collection_items.query.filter(collection_items.country == session["clicked_country"])
     if "name" in session:
-        return render_template("app/country.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items)
+        return render_template("app/country.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items, country_name = country_name)
     else:
-        return render_template("app/country.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items)
+        return render_template("app/country.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items, country_name = country_name)
+
+@app.route("/search/", methods=["POST", "GET"])
+def search():
+    global global_arg
+    if global_arg == None:
+        global_arg = list()
+    if request.method == "POST":
+        if(list(request.form.keys())[0] != "search"):
+            pass
+        else:
+            search_text = request.form["search"]
+            global_arg = search_in_database(search_text)
+    if "name" in session:
+        return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = global_arg)
+    else:
+        return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = global_arg)
 
 @app.route("/view/users")
 def view():
