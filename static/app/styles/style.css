@@ -488,3 +488,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .country_super_container{
     width: 30%;
 }
+
+.collection_super_container{
+    width: 300px;
+}

@@ -373,7 +373,7 @@ def account():
                     # user = users.query.filter_by(email = session["email"]).first()
                     # user.profile_picture_path = session["profile_picture_path"]
                     # db.session.commit()
-                    #uploadProfilePicture(file) # This line needs to be uncommented
+                    uploadProfilePicture(file) # <-----------------------------
                     flash("Picture changed successfully.")
                 flash_messages_view = 1
             elif request.form.get("change_data"):
@@ -450,10 +450,10 @@ def add_item():
                     composition = request.form["composition"]
                     description = request.form["description"]
                     is_featured = "featured" in request.form
-                    # obverse_image_url = uploadCollectionItem(obverse_image) # This line needs to be uncommented
-                    # reverse_image_url = uploadCollectionItem(reverse_image) # This line needs to be uncommented
-                    obverse_image_url = "fake.com" # This line needs to be commented
-                    reverse_image_url = "fake2.com" # This line needs to be commented
+                    obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
+                    reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
+                    #obverse_image_url = "fake.com" # ----------------------------->
+                    #reverse_image_url = "fake2.com" # ----------------------------->
                     new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
                     db.session.add(new_item)
                     db.session.commit()
@@ -471,8 +471,22 @@ def add_item():
 def collection():
     if "name" in session:
         if session["is_admin"] == True:
+            if request.method == "POST":
+                item_id = int(list(request.form.keys())[0])
+                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                if like == None:
+                    new_like = likes(item_id, session["email"])
+                    db.session.add(new_like)
+                    db.session.commit()
+                else:
+                    db.session.delete(like)
+                    db.session.commit()
             items = collection_items.query.filter_by(email = session["email"])
-            return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True)
+            user_likes = set()
+            q = likes.query.filter(likes.user_email == session["email"])
+            for l in q:
+                user_likes.add(l.item_id)
+            return render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True, user_likes = user_likes)
         else:
             flash("Only admin users can go to this page")
             return redirect(url_for("account"))
@@ -573,11 +587,29 @@ def about_user():
 
 @app.route("/user_collection", methods=["POST", "GET"])
 def user_collection():
+    if request.method == "POST":
+        if "name" not in session:
+            flash("You need to login in order to react or comment to a post")
+            return redirect(url_for("login"))
+        else:
+            item_id = int(list(request.form.keys())[0])
+            like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+            if like == None:
+                new_like = likes(item_id, session["email"])
+                db.session.add(new_like)
+                db.session.commit()
+            else:
+                db.session.delete(like)
+                db.session.commit()
     clicked_user_items = collection_items.query.filter_by(email = session["clicked_user_email"])
+    user_likes = set()
     if "name" in session:
-        return render_template("app/user_collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/user_collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items, user_likes = user_likes)
     else:
-        return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items)
+        return render_template("app/user_collection.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, clicked_user_name = session["clicked_user_name"], clicked_user_email = session["clicked_user_email"], clicked_user_profile_picture_path = session["clicked_user_profile_picture_path"], clicked_user_is_admin = session["clicked_user_is_admin"], clicked_user_about_me_text = session["clicked_user_about_me_text"], clicked_user_items = clicked_user_items, user_likes = user_likes)
 
 @app.route("/countries", methods=["POST", "GET"])
 def countries():
