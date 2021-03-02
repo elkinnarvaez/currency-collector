@@ -91,24 +91,24 @@ for(let image_container of images_containers){
     if(item_product_type == "Moneda"){
       item_obverse_image_path_image_tag = document.createElement('img');
       item_obverse_image_path_image_tag.classList.add("obverse_side_coin_img_preview");
-      item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
-      // item_obverse_image_path_image_tag.src = "https://coin-brothers.com/photos/United_States_of_America_(USA)_Cents_10/1965-2016_24.02.2016_15.19.jpg"; // ----------------------------->
+      // item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
+      item_obverse_image_path_image_tag.src = "https://coin-brothers.com/photos/United_States_of_America_(USA)_Cents_10/1965-2016_24.02.2016_15.19.jpg"; // ----------------------------->
   
       item_reverse_image_path_image_tag = document.createElement('img');
       item_reverse_image_path_image_tag.classList.add("reverse_side_coin_img_preview");
-      item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
-      // item_reverse_image_path_image_tag.src = "https://s3.amazonaws.com/ngccoin-production/world-coin-price-guide/82716b.jpg"; // ----------------------------->
+      // item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
+      item_reverse_image_path_image_tag.src = "https://s3.amazonaws.com/ngccoin-production/world-coin-price-guide/82716b.jpg"; // ----------------------------->
     }
     else{
       item_obverse_image_path_image_tag = document.createElement('img');
       item_obverse_image_path_image_tag.classList.add("obverse_side_bill_img_preview");
-      item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
-      // item_obverse_image_path_image_tag.src = "https://upload.wikimedia.org/wikipedia/commons/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg"; // ----------------------------->
+      // item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
+      item_obverse_image_path_image_tag.src = "https://upload.wikimedia.org/wikipedia/commons/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg"; // ----------------------------->
   
       item_reverse_image_path_image_tag = document.createElement('img');
       item_reverse_image_path_image_tag.classList.add("reverse_side_bill_img_preview");
-      item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
-      // item_reverse_image_path_image_tag.src = "https://www.uscurrency.gov/sites/default/files/styles/bill_version/public/denominations/1_1963-present-back.jpg?itok=-_dI8Duo"; // ----------------------------->
+      // item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
+      item_reverse_image_path_image_tag.src = "https://www.uscurrency.gov/sites/default/files/styles/bill_version/public/denominations/1_1963-present-back.jpg?itok=-_dI8Duo"; // ----------------------------->
     }
 
     const images_preview_container = createCustomElement('div', {class: 'images_preview_container'}, [item_obverse_image_path_image_tag, item_reverse_image_path_image_tag])

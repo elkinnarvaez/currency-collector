@@ -373,7 +373,7 @@ def account():
                     # user = users.query.filter_by(email = session["email"]).first()
                     # user.profile_picture_path = session["profile_picture_path"]
                     # db.session.commit()
-                    uploadProfilePicture(file) # <-----------------------------
+                    # uploadProfilePicture(file) # <-----------------------------
                     flash("Picture changed successfully.")
                 flash_messages_view = 1
             elif request.form.get("change_data"):
@@ -450,10 +450,10 @@ def add_item():
                     composition = request.form["composition"]
                     description = request.form["description"]
                     is_featured = "featured" in request.form
-                    obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
-                    reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
-                    #obverse_image_url = "fake.com" # ----------------------------->
-                    #reverse_image_url = "fake2.com" # ----------------------------->
+                    # obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
+                    # reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
+                    obverse_image_url = "fake.com" # ----------------------------->
+                    reverse_image_url = "fake2.com" # ----------------------------->
                     new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
                     db.session.add(new_item)
                     db.session.commit()
