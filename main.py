@@ -240,6 +240,17 @@ def add_header(response):
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
 
+@app.route("/get_comments/<item_id>", methods=["POST", "GET"])
+def get_comments(item_id):
+    if request.method == 'GET':
+        response = ""
+        item_comments = comments.query.filter(comments.item_id == item_id)
+        for c in item_comments:
+            user = users.query.filter_by(email = c.user_email).first()
+            response += user.name + "*" + user.profile_picture_path + "*" + c.comment_text + "|"
+        return response[0:(len(response)-1)]
+        
+
 @app.route("/")
 def start():
     return redirect(url_for("countries"))
@@ -251,15 +262,21 @@ def home():
             flash("You need to login in order to react or comment to a post")
             return redirect(url_for("login"))
         else:
-            item_id = int(list(request.form.keys())[0])
-            like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
-            if like == None:
-                new_like = likes(item_id, session["email"])
-                db.session.add(new_like)
+            if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                input_text_comment = request.form[list(request.form.keys())[0]]
+                new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                db.session.add(new_comment)
                 db.session.commit()
             else:
-                db.session.delete(like)
-                db.session.commit()
+                item_id = int(list(request.form.keys())[0])
+                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                if like == None:
+                    new_like = likes(item_id, session["email"])
+                    db.session.add(new_like)
+                    db.session.commit()
+                else:
+                    db.session.delete(like)
+                    db.session.commit()
     # items = list(collection_items.query.filter(collection_items.email != session["email"]))
     items = list(collection_items.query.filter(True))
     user_objects = dict()
@@ -311,7 +328,7 @@ def login():
                 session["num_item"] = user.num_item
                 session["is_admin"] = user.is_admin
                 session["about_me_text"] = user.about_me_text
-                return redirect(url_for("home"))
+                return redirect(url_for("countries"))
             else:
                flash("Password incorrect. Please try again.") 
         else:
@@ -425,39 +442,45 @@ def add_item():
     if "name" in session:
         if session["is_admin"] == True:
             if request.method == "POST":
-                # check if the post request has the file part
-                if 'obverse_image' not in request.files:
-                    flash('No obverse_image part')
-                    return redirect(request.url)
-                if 'reverse_image' not in request.files:
-                    flash('No reverse_image part')
-                    return redirect(request.url)
-                obverse_image = request.files['obverse_image']
-                reverse_image = request.files['reverse_image']
-                # if user does not select file, browser also
-                # submit an empty part without filename
-                if obverse_image.filename == '':
-                    flash('Obverse image not selected')
-                    return redirect(request.url)
-                if reverse_image.filename == '':
-                    flash('Reverse image not selected')
-                    return redirect(request.url)
-                if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
-                    product_type = request.form["type"]
-                    country = request.form["country"]
-                    denomination = request.form["denomination"]
-                    year = request.form["year"]
-                    composition = request.form["composition"]
-                    description = request.form["description"]
-                    is_featured = "featured" in request.form
-                    # obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
-                    # reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
-                    obverse_image_url = "fake.com" # ----------------------------->
-                    reverse_image_url = "fake2.com" # ----------------------------->
-                    new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
-                    db.session.add(new_item)
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
                     db.session.commit()
-                    flash("Item added successfully")
+                else:
+                    # check if the post request has the file part
+                    if 'obverse_image' not in request.files:
+                        flash('No obverse_image part')
+                        return redirect(request.url)
+                    if 'reverse_image' not in request.files:
+                        flash('No reverse_image part')
+                        return redirect(request.url)
+                    obverse_image = request.files['obverse_image']
+                    reverse_image = request.files['reverse_image']
+                    # if user does not select file, browser also
+                    # submit an empty part without filename
+                    if obverse_image.filename == '':
+                        flash('Obverse image not selected')
+                        return redirect(request.url)
+                    if reverse_image.filename == '':
+                        flash('Reverse image not selected')
+                        return redirect(request.url)
+                    if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
+                        product_type = request.form["type"]
+                        country = request.form["country"]
+                        denomination = request.form["denomination"]
+                        year = request.form["year"]
+                        composition = request.form["composition"]
+                        description = request.form["description"]
+                        is_featured = "featured" in request.form
+                        # obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
+                        # reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
+                        obverse_image_url = "fake.com" # ----------------------------->
+                        reverse_image_url = "fake2.com" # ----------------------------->
+                        new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
+                        db.session.add(new_item)
+                        db.session.commit()
+                        flash("Item added successfully")
             items = collection_items.query.filter_by(email = session["email"])
             return render_template("app/add_item.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True)
         else:
@@ -472,15 +495,21 @@ def collection():
     if "name" in session:
         if session["is_admin"] == True:
             if request.method == "POST":
-                item_id = int(list(request.form.keys())[0])
-                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
-                if like == None:
-                    new_like = likes(item_id, session["email"])
-                    db.session.add(new_like)
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
                     db.session.commit()
                 else:
-                    db.session.delete(like)
-                    db.session.commit()
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
             items = collection_items.query.filter_by(email = session["email"])
             user_likes = set()
             q = likes.query.filter(likes.user_email == session["email"])
@@ -592,15 +621,21 @@ def user_collection():
             flash("You need to login in order to react or comment to a post")
             return redirect(url_for("login"))
         else:
-            item_id = int(list(request.form.keys())[0])
-            like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
-            if like == None:
-                new_like = likes(item_id, session["email"])
-                db.session.add(new_like)
+            if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                input_text_comment = request.form[list(request.form.keys())[0]]
+                new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                db.session.add(new_comment)
                 db.session.commit()
             else:
-                db.session.delete(like)
-                db.session.commit()
+                item_id = int(list(request.form.keys())[0])
+                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                if like == None:
+                    new_like = likes(item_id, session["email"])
+                    db.session.add(new_like)
+                    db.session.commit()
+                else:
+                    db.session.delete(like)
+                    db.session.commit()
     clicked_user_items = collection_items.query.filter_by(email = session["clicked_user_email"])
     user_likes = set()
     if "name" in session:
@@ -643,15 +678,21 @@ def country(country_name):
                 flash("You need to login in order to react or comment to a post")
                 return redirect(url_for("login"))
             else:
-                item_id = int(list(request.form.keys())[0])
-                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
-                if like == None:
-                    new_like = likes(item_id, session["email"])
-                    db.session.add(new_like)
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
                     db.session.commit()
                 else:
-                    db.session.delete(like)
-                    db.session.commit()
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
         else:
             search_text = request.form["search"]
             global_arg = search_in_database(search_text)
@@ -677,15 +718,21 @@ def search():
                 flash("You need to login in order to react or comment to a post")
                 return redirect(url_for("login"))
             else:
-                item_id = int(list(request.form.keys())[0])
-                like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
-                if like == None:
-                    new_like = likes(item_id, session["email"])
-                    db.session.add(new_like)
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
                     db.session.commit()
                 else:
-                    db.session.delete(like)
-                    db.session.commit()
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
         else:
             search_text = request.form["search"]
             global_arg = search_in_database(search_text)
