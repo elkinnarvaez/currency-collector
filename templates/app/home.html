@@ -13,8 +13,8 @@
                         <div class="w3-container">
                             <h4 class="w3-center">Mi perfil</h4>
                             <!-- <p class="w3-center"><img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p> -->
-                            <!-- <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="width:180px;" alt="Avatar"></p> -->
-                            <p class="w3-center"><img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="width:180px;" alt="Avatar"></p>
+                            <p class="w3-center"><img src="{{profile_picture_path}}" class="w3-circle" style="width:180px;" alt="Avatar"></p>
+                            <!-- <p class="w3-center"><img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="width:180px;" alt="Avatar"></p> -->
                             <hr>
                             <p><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>{{name}}</p>
                             <p><i class="fa fa-envelope fa-fw w3-margin-right w3-text-theme"></i>{{email}}</p>
@@ -48,21 +48,21 @@
                             </div> -->
                             <div class="publication_container">
                                 {% if item.product_type == "Moneda" %}
-                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}">
-                                        <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                        <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
-                                        <!-- <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}">
+                                        <!-- <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                        <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}"> -->
+                                        <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}">
                                     </div>
                                     <div class = "publication_description" style="margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% else %}
-                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}">
-                                        <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
-                                        <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}">
+                                        <!-- <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}"> -->
+                                        <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}">
                                     </div>
                                     <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 25px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
@@ -75,7 +75,7 @@
                                 {% else %}
                                     <button type="submit" class="w3-button w3-round w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
                                 {% endif %}
-                                <button type="button" class="w3-button w3-round w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                                <button type="button" class="w3-button w3-round w3-margin-bottom images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}"><i class="fa fa-comment"></i>  Comentar</button> 
                             </form>
                         </div>
                     {% endfor %}
@@ -104,21 +104,21 @@
                             </div> -->
                             <div class="publication_container">
                                 {% if item.product_type == "Moneda" %}
-                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}">
-                                        <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                        <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}">
-                                        <!-- <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}">
+                                        <!-- <img class = "obverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
+                                        <img class = "reverse_side_coin_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_coin.jpg')}}"> -->
+                                        <img class = "obverse_side_coin_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_coin_pub" src="{{item.reverse_image_path}}">
                                     </div>
                                     <div class = "publication_description" style="margin-top: 10px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
                                     </div>
                                 {% else %}
-                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}">
-                                        <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}">
-                                        <!-- <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
-                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}"> -->
+                                    <div class="images_container" style="top:10px;" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}">
+                                        <!-- <img class = "obverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
+                                        <img class = "reverse_side_bill_pub" src="{{url_for('static', filename='app/images/collection_items_images/reverse_side_bill.jpg')}}"> -->
+                                        <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
+                                        <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}">
                                     </div>
                                     <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 26px;">
                                         <em><p>{{item.country}} - {{item.denomination}} - {{item.year}}</p></em>
@@ -131,7 +131,7 @@
                                 {% else %}
                                     <button type="submit" class="w3-button w3-round w3-margin-bottom" name="{{item._id}}"><i class="fa fa-thumbs-up"></i> Me gusta</button> 
                                 {% endif %}
-                                <button type="button" class="w3-button w3-round w3-margin-bottom"><i class="fa fa-comment"></i>  Comentar</button> 
+                                <button type="button" class="w3-button w3-round w3-margin-bottom images_container" id="{{item._id}}|{{item.product_type}}|{{item.country}}|{{item.denomination}}|{{item.year}}|{{item.composition}}|{{item.description}}|{{item.obverse_image_path}}|{{item.reverse_image_path}}|{{item_owner_name}}|{{item_owner_profile_picture_path}}|{{email}}|{{item.num_views}}"><i class="fa fa-comment"></i>  Comentar</button> 
                             </form>
                         </div>
                     {% endfor %}

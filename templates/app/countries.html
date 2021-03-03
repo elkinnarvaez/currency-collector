@@ -20,6 +20,12 @@
                         <li class="nav-item">
                           <a class="nav-link" href="/countries">Paises</a>
                         </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/featured">Destacados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/most_visited">Más visitados</a>
+                        </li>
                       </ul>
                     </div>
                   </nav>
@@ -30,11 +36,11 @@
                         {% for item in country_items %}
                             <button type="submit" class="w3-container w3-card w3-white w3-round w3-margin-right w3-margin-left w3-margin-top button-country-group-super-container" name="{{item.country}}">
                                 {% if item.product_type == "Moneda" %}
-                                    <img class="obverse_side_coin_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}">
-                                    <!-- <img class="obverse_side_coin_search" src="{{item.obverse_image_path}}"> -->
+                                    <!-- <img class="obverse_side_coin_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_coin.jpg')}}"> -->
+                                    <img class="obverse_side_coin_search" src="{{item.obverse_image_path}}">
                                 {% else %}
-                                    <img class="obverse_side_bill_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}">
-                                    <!-- <img class="obverse_side_bill_search" src="{{item.obverse_image_path}}"> -->
+                                    <!-- <img class="obverse_side_bill_search" src="{{url_for('static', filename='app/images/collection_items_images/obverse_side_bill.jpg')}}"> -->
+                                    <img class="obverse_side_bill_search" src="{{item.obverse_image_path}}">
                                 {% endif %}
                                 <p><b>{{item.country}}</b></p>
                             </button>

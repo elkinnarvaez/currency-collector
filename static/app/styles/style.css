@@ -402,7 +402,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     justify-content: space-around;
     width: 550px;
     margin-top: 30px;
-    margin-left: 10px;
+    margin-left: 5%;
 }
 
 .item_details_bill{
@@ -410,7 +410,7 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     flex-direction: column;
     justify-content: space-around;
     width: 500px;
-    margin-left: 10px;
+    margin-left: 5%;
     margin-top: 30px;
 }
 
@@ -419,13 +419,14 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
     flex-direction: row;
     position: relative;
     max-width: 100%;
+    margin-top: 20px;
 }
 
 .description_div{
     height: 170px;
     width: 50%;
     margin-right: 5px;
-    margin-left: 4px;
+    margin-left: 10px;
     overflow-y: auto;
 }
 
@@ -525,7 +526,6 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 
 .comments_container{
     width: 45%;
-    margin-left: 50px;
     margin-top: 50px;
     overflow-y: auto;
 }
@@ -561,4 +561,18 @@ html, body, h1, h2, h3, h4, h5 {font-family: "Open Sans", sans-serif}
 .main_details_div_tag{
     display: flex;
     flex-direction: row;
+}
+
+.message{
+    width: 60%;
+}
+
+.message_form{
+    display: flex;
+    align-items: center;
+}
+
+.message_container{
+    margin-top: 30px;
+    margin-bottom: 30px;
 }

@@ -6,6 +6,7 @@ import os, json, boto3, psycopg2
 from werkzeug.utils import secure_filename
 import requests
 import datetime
+from sqlalchemy import desc
 
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -248,6 +249,9 @@ def get_comments(item_id):
         for c in item_comments:
             user = users.query.filter_by(email = c.user_email).first()
             response += user.name + "*" + user.profile_picture_path + "*" + c.comment_text + "|"
+        item = collection_items.query.filter(collection_items._id == item_id).first()
+        item.num_views += 1
+        db.session.commit()
         return response[0:(len(response)-1)]
         
 
@@ -278,7 +282,7 @@ def home():
                     db.session.delete(like)
                     db.session.commit()
     # items = list(collection_items.query.filter(collection_items.email != session["email"]))
-    items = list(collection_items.query.filter(True))
+    items = list(collection_items.query.filter(True).order_by(desc(collection_items._id)).order_by(desc(collection_items.date)))
     user_objects = dict()
     for item in items:
         if item.email not in user_objects:
@@ -390,7 +394,7 @@ def account():
                     # user = users.query.filter_by(email = session["email"]).first()
                     # user.profile_picture_path = session["profile_picture_path"]
                     # db.session.commit()
-                    # uploadProfilePicture(file) # <-----------------------------
+                    uploadProfilePicture(file) # <-----------------------------
                     flash("Picture changed successfully.")
                 flash_messages_view = 1
             elif request.form.get("change_data"):
@@ -473,10 +477,10 @@ def add_item():
                         composition = request.form["composition"]
                         description = request.form["description"]
                         is_featured = "featured" in request.form
-                        # obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
-                        # reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
-                        obverse_image_url = "fake.com" # ----------------------------->
-                        reverse_image_url = "fake2.com" # ----------------------------->
+                        obverse_image_url = uploadCollectionItem(obverse_image) # <-----------------------------
+                        reverse_image_url = uploadCollectionItem(reverse_image) # <-----------------------------
+                        # obverse_image_url = "fake.com" # ----------------------------->
+                        # reverse_image_url = "fake2.com" # ----------------------------->
                         new_item = collection_items(product_type, country, denomination, year, composition, description, obverse_image_url, reverse_image_url, session["email"], is_featured, 0, datetime.date.today())
                         db.session.add(new_item)
                         db.session.commit()
@@ -744,6 +748,82 @@ def search():
         return render_template("app/search.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = global_arg, user_likes = user_likes)
     else:
         return render_template("app/search.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = global_arg, user_likes = user_likes)
+
+@app.route("/featured", methods=["POST", "GET"])
+def featured():
+    global global_arg
+    if request.method == "POST":
+        if(list(request.form.keys())[0] != "search"):
+            if "name" not in session:
+                flash("You need to login in order to react or comment to a post")
+                return redirect(url_for("login"))
+            else:
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
+                    db.session.commit()
+                else:
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
+        else:
+            search_text = request.form["search"]
+            global_arg = search_in_database(search_text)
+            return redirect(url_for("search"))
+    items = collection_items.query.filter(collection_items.is_featured == True)
+    user_likes = set()
+    if "name" in session:
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/featured.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items, user_likes = user_likes)
+    else:
+        return render_template("app/featured.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items, user_likes = user_likes)
+
+@app.route("/most_visited", methods=["POST", "GET"])
+def most_visited():
+    global global_arg
+    if request.method == "POST":
+        if(list(request.form.keys())[0] != "search"):
+            if "name" not in session:
+                flash("You need to login in order to react or comment to a post")
+                return redirect(url_for("login"))
+            else:
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
+                    db.session.commit()
+                else:
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
+        else:
+            search_text = request.form["search"]
+            global_arg = search_in_database(search_text)
+            return redirect(url_for("search"))
+    items = collection_items.query.filter(True).order_by(desc(collection_items.num_views))
+    user_likes = set()
+    if "name" in session:
+        q = likes.query.filter(likes.user_email == session["email"])
+        for l in q:
+            user_likes.add(l.item_id)
+        return render_template("app/most_visited.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], logged_in = True, items = items, user_likes = user_likes)
+    else:
+        return render_template("app/most_visited.html", name = None, email = None, profile_picture_path = None, is_admin = False, logged_in = False, items = items, user_likes = user_likes)
 
 @app.route("/view/users")
 def view():

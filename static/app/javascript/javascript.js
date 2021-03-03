@@ -85,6 +85,7 @@ for(let image_container of images_containers){
     let item_owner_name = item_data[9];
     let item_owner_profile_picture_path = item_data[10];
     let user_email = item_data[11];
+    let item_num_views = item_data[12];
 
     var item_obverse_image_path_image_tag;
     var item_reverse_image_path_image_tag;
@@ -93,32 +94,32 @@ for(let image_container of images_containers){
     if(item_product_type == "Moneda"){
       item_obverse_image_path_image_tag = document.createElement('img');
       item_obverse_image_path_image_tag.classList.add("obverse_side_coin_img_preview");
-      // item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
-      item_obverse_image_path_image_tag.src = "https://coin-brothers.com/photos/United_States_of_America_(USA)_Cents_10/1965-2016_24.02.2016_15.19.jpg"; // ----------------------------->
+      item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
+      // item_obverse_image_path_image_tag.src = "https://coin-brothers.com/photos/United_States_of_America_(USA)_Cents_10/1965-2016_24.02.2016_15.19.jpg"; // ----------------------------->
   
       item_reverse_image_path_image_tag = document.createElement('img');
       item_reverse_image_path_image_tag.classList.add("reverse_side_coin_img_preview");
-      // item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
-      item_reverse_image_path_image_tag.src = "https://s3.amazonaws.com/ngccoin-production/world-coin-price-guide/82716b.jpg"; // ----------------------------->
+      item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
+      // item_reverse_image_path_image_tag.src = "https://s3.amazonaws.com/ngccoin-production/world-coin-price-guide/82716b.jpg"; // ----------------------------->
 
       images_preview_container = createCustomElement('div', {class: 'images_preview_container_coin'}, [item_obverse_image_path_image_tag, item_reverse_image_path_image_tag])
     }
     else{
       item_obverse_image_path_image_tag = document.createElement('img');
       item_obverse_image_path_image_tag.classList.add("obverse_side_bill_img_preview");
-      // item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
-      item_obverse_image_path_image_tag.src = "https://upload.wikimedia.org/wikipedia/commons/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg"; // ----------------------------->
+      item_obverse_image_path_image_tag.src = item_obverse_image_path; // <-----------------------------
+      // item_obverse_image_path_image_tag.src = "https://upload.wikimedia.org/wikipedia/commons/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg"; // ----------------------------->
   
       item_reverse_image_path_image_tag = document.createElement('img');
       item_reverse_image_path_image_tag.classList.add("reverse_side_bill_img_preview");
-      // item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
-      item_reverse_image_path_image_tag.src = "https://www.uscurrency.gov/sites/default/files/styles/bill_version/public/denominations/1_1963-present-back.jpg?itok=-_dI8Duo"; // ----------------------------->
+      item_reverse_image_path_image_tag.src = item_reverse_image_path; // <-----------------------------
+      // item_reverse_image_path_image_tag.src = "https://www.uscurrency.gov/sites/default/files/styles/bill_version/public/denominations/1_1963-present-back.jpg?itok=-_dI8Duo"; // ----------------------------->
 
       images_preview_container = createCustomElement('div', {class: 'images_preview_container_bill'}, [item_obverse_image_path_image_tag, item_reverse_image_path_image_tag])
     }
 
     var h1_tag = "<h4><b>Características:</b></h4>"
-    var list_tag = "<ul><li>Tipo: " + item_product_type + "</li><li>País: " + item_country +  "</li><li>Denominación: " + item_denomination + "</li><li>Año: " + item_year + "</li><li>Composición: " + item_composition + "</li></ul>"
+    var list_tag = "<ul><li>Tipo: " + item_product_type + "</li><li>País: " + item_country +  "</li><li>Denominación: " + item_denomination + "</li><li>Año: " + item_year + "</li><li>Composición: " + item_composition + "</li><li>Número de visitas: " + item_num_views + "</li></ul>"
     var list_div = createCustomElement('div', {class: 'list_div'}, [h1_tag, list_tag])
     var h1_tag_description = "<h4><b>Descripción:</b></h4>";
     var description_text_div = "<div style='margin-left:7%; white-space: pre-line;'>" + item_description + "</div>"
@@ -128,6 +129,7 @@ for(let image_container of images_containers){
     var comments;
     fetch(`/get_comments/${item_id}`)
     .then(function (response) {
+        item_num_views = item_num_views + 1
         return response.text();
     }).then(function (text) {
       console.log(text)
@@ -143,7 +145,7 @@ for(let image_container of images_containers){
       while(i < comments.length && comments[0] != ""){
         html_comments += `
         <div class="user_comment">
-          <img src="https://codahosted.io/docs/IZn3UNbEOU/blobs/bl-137mEqTBzf/8e04b9feef4481efc0616766fb5547e099f3b5a7ecf18c5d6e1b03bbacdb9c9d74ac9f8cc0b5457d5ea1700a7cd5f866942616013c01cff01c2641e5ce293e4f9733859c5858dc1c3f1738355e8591ffd8fca9311e1e2283bb8ea449f5307c52c0dec951" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:30px">
+          <img src="${comments[i][1]}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:30px">
           <h4>${comments[i][0]}</h4>
           <p class="user_text_comment">${comments[i][2]}</p>
         </div>
@@ -167,11 +169,14 @@ for(let image_container of images_containers){
     `
     
     const exchange_item_div = `
-      <div class="exchange_container">
-        <h3>Deja un mensaje al propietario de este ítem</h3>
-        <hr style="width: 85%">
-        <img src="https://codahosted.io/docs/IZn3UNbEOU/blobs/bl-137mEqTBzf/8e04b9feef4481efc0616766fb5547e099f3b5a7ecf18c5d6e1b03bbacdb9c9d74ac9f8cc0b5457d5ea1700a7cd5f866942616013c01cff01c2641e5ce293e4f9733859c5858dc1c3f1738355e8591ffd8fca9311e1e2283bb8ea449f5307c52c0dec951" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:40px">
-        <textarea class="exchange_text" name="exchange_text" placeholder=""></textarea>
+      <div class="message_container">
+        <h3>Deja un mensaje al propietario</h3>
+        <hr style="width: 70%">
+        <img src="${item_owner_profile_picture_path}" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:40px">
+        <div class="message_form">
+          <textarea class="message" name="message" placeholder=""></textarea>
+          <input type="submit" class="w3-button w3-theme-d1 w3-margin-left" value="Enviar">
+        <div>
       </div>
     `
 

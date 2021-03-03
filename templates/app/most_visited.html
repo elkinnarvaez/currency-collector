@@ -1,5 +1,5 @@
 {% extends "app/base.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Most visited{% endblock %}
 {% block content %}
     <!-- Page Container -->
     <div class="w3-container" style="margin-top:80px;">    
@@ -53,7 +53,7 @@
                                             <img class = "obverse_side_bill_pub" src="{{item.obverse_image_path}}">
                                             <img class = "reverse_side_bill_pub" src="{{item.reverse_image_path}}">
                                         </div>
-                                        <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 26px;">
+                                        <div class = "publication_description" style="position:relative; top:10px; margin-top: 20px; margin-bottom: 24px;">
                                             <em><p>{{item.denomination}} - {{item.year}}</p></em>
                                         </div>
                                     {% endif %}

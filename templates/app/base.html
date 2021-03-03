@@ -21,12 +21,12 @@
                 <a href="/home" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Inicio"><i class="fa fa-globe"></i></a>
                 <a href="/countries" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Buscar"><i class="fa fa-search"></i></a>
                 {% if logged_in == True %}
-                    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Mensajes"><i class="fa fa-envelope"></i></a>
+                    <!-- <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Mensajes"><i class="fa fa-envelope"></i></a> -->
                 {% endif %}
                 {% if is_admin == True %}
                     <div class="w3-dropdown-hover w3-hide-small">
                         <!-- <button class="w3-button w3-padding-large" title="Notificaciones"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></button>      -->
-                        <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
+                        <!-- <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px">
                             <a href="#" class="w3-bar-item w3-button">One new friend request</a>
                             <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
                             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
@@ -35,7 +35,7 @@
                             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
                             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
                             <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
-                        </div>
+                        </div> -->
                     </div>
                 {% endif %}
                 <a href="/view_collectors" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Coleccionistas"><i class="fa fa-users"></i></a>
@@ -43,8 +43,8 @@
                     <div class="w3-dropdown-hover w3-hide-small w3-right">
                         <a href="/account" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" style="margin: 0px;" title="Mi cuenta">
                             <!-- <img src="{{url_for('static', filename=profile_picture_path)}}" class="w3-circle" style="height:30px;width:30px" alt="Avatar"> -->
-                            <!-- <img src="{{profile_picture_path}}" class="w3-circle" style="height:30px;width:30px" alt="Avatar"> -->
-                            <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="height:30px;width:30px" alt="Avatar">
+                            <img src="{{profile_picture_path}}" class="w3-circle" style="height:30px;width:30px" alt="Avatar">
+                            <!-- <img src="{{url_for('static', filename='/app/images/user_profile_pictures/avatar3.png')}}" class="w3-circle" style="height:30px;width:30px" alt="Avatar"> -->
                         </a>
                         <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;right:1%;top:100%">
                             <a href="/account" class="w3-bar-item w3-button">Mi cuenta</a>
