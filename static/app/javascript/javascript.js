@@ -182,10 +182,10 @@ for(let image_container of images_containers){
 
     var item_details_div_tag;
     if(item_product_type == "Moneda"){
-      item_details_div_tag = createCustomElement('div', {class: 'item_details_coin'}, [images_preview_container, details_preview, exchange_item_div]);
+      item_details_div_tag = createCustomElement('div', {class: 'item_details_coin'}, [images_preview_container, details_preview]);
     }
     else{
-      item_details_div_tag = createCustomElement('div', {class: 'item_details_bill'}, [images_preview_container, details_preview, exchange_item_div]);
+      item_details_div_tag = createCustomElement('div', {class: 'item_details_bill'}, [images_preview_container, details_preview]);
     }
     const main_details_div_tag = createCustomElement('div', {class: 'main_details_div_tag'}, [item_details_div_tag, comments_container_div])
     printModal(main_details_div_tag);
