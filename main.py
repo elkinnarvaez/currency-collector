@@ -8,6 +8,7 @@ import requests
 import datetime
 from sqlalchemy import desc
 
+
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
