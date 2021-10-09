@@ -356,7 +356,7 @@ def signup():
         f_email = request.form["email"]
         f_password = request.form["password"]
         f_confirmed_password = request.form["confirmed_password"]
-        f_is_admin = "is_admin" in request.form
+        f_is_admin = True if request.form["is_admin"] == "admin" else False
         user = users.query.filter_by(email = f_email).first()
         add_user = True
         if user != None:
