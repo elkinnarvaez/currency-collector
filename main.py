@@ -16,6 +16,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 global_arg = None
 app = Flask(__name__)
 app.secret_key = "\xdb\x9d\xc6\x08\xe9\x1d\xaa\x7f\xe5\xd6\xfb\xf7\xcb]\x04\xd4c\x0f\xaf$\x83\xd5\x16\x94"
+app.permanent_session_lifetime = timedelta(days=5)
 if(os.environ['DATABASE_URL'][0:10] == "postgresql"):
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:
@@ -240,6 +241,7 @@ def search_in_database(search_text):
             elif(KMPSearch(key_word, item.description.lower())):
                 ans.append(item); added = True
     return ans
+
 @app.after_request
 def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
@@ -337,6 +339,7 @@ def login():
                 session["num_item"] = user.num_item
                 session["is_admin"] = user.is_admin
                 session["about_me_text"] = user.about_me_text
+                session.permanent = True
                 return redirect(url_for("countries"))
             else:
                flash("Password incorrect. Please try again.") 
