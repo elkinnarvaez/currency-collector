@@ -264,7 +264,7 @@ def get_comments(item_id):
 
 @app.route("/")
 def start():
-    return redirect(url_for("countries"))
+    return redirect(url_for("home"))
 
 @app.route("/home/", methods=["POST", "GET"])
 def home():
@@ -340,7 +340,7 @@ def login():
                 session["is_admin"] = user.is_admin
                 session["about_me_text"] = user.about_me_text
                 session.permanent = True
-                return redirect(url_for("countries"))
+                return redirect(url_for("home"))
             else:
                flash("Password incorrect. Please try again.") 
         else:
