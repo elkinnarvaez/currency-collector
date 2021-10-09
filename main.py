@@ -356,6 +356,7 @@ def signup():
         f_email = request.form["email"]
         f_password = request.form["password"]
         f_confirmed_password = request.form["confirmed_password"]
+        f_is_admin = "is_admin" in request.form
         user = users.query.filter_by(email = f_email).first()
         add_user = True
         if user != None:
@@ -368,7 +369,7 @@ def signup():
             session["filling_email"] = f_email
             session["filling_password"] = f_password
             #new_user = users(f_name, f_email, f_password, "app/images/user_profile_pictures/avatar3.png")
-            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0, False, "Una descripción acerca de mí se encontrará en este lugar pronto...")
+            new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0, f_is_admin, "Una descripción acerca de mí se encontrará en este lugar pronto...")
             db.session.add(new_user)
             db.session.commit()
             flash("You were signed up successfully")
