@@ -9,6 +9,7 @@ import datetime
 from sqlalchemy import desc
 from utils import convert_uri
 
+# Modifying testing
 
 UPLOAD_FOLDER = './static/app/images/user_profile_pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
