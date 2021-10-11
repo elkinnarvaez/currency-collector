@@ -196,6 +196,27 @@ comment = comments(1, "elkin@gmail.com", "Comentario..")
 #     db.session.commit()
 #     return response[0:(len(response)-1)]
 
+# def check_password_sign_up(password):
+#     capital = False
+#     numeric = False
+#     for c in password:
+#         if(c.isupper()):
+#             capital = True
+#         if(c.isdigit()):
+#             numeric = True
+#     valid = capital and numeric and len(password) >= 6
+#     # if(not valid):
+#     #     flash("La contrasea ingresada no es lo suficientemente segura")
+#     if(not capital):
+#         print("La contraseña debe contener al menos una letra mayúscula")
+#     if(not numeric):
+#         print("La contraseña debe tener al menos un valor numérico")
+#     if(not len(password) >= 6):
+#         print("La contraseña debe tener al menos 6 caracteres")
+#     return valid
+
+# ----------- CASOS DE PRUEBA ----------- #
+
 # Casos de prueba para la función search_in_database
 # search_in_database("Billete")
 # search_in_database("Monedas y Billetes")
@@ -209,3 +230,7 @@ comment = comments(1, "elkin@gmail.com", "Comentario..")
 
 # Casos de prueba para la función get_comments
 # get_comments(11)
+
+# Casos de prueba para la función
+# check_password_sign_up("Usuario1989")
+# check_password_sign_up("juan")
