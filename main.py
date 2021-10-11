@@ -29,6 +29,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # }
 db = SQLAlchemy(app)
 
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 class users(db.Model):
     _id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -243,6 +244,25 @@ def search_in_database(search_text):
                 ans.append(item); added = True
     return ans
 
+def check_password_sign_up(password):
+    capital = False
+    numeric = False
+    for c in password:
+        if(c.isupper()):
+            capital = True
+        if(c.isdigit()):
+            numeric = True
+    valid = capital and numeric and len(password) >= 6
+    # if(not valid):
+    #     flash("La contrasea ingresada no es lo suficientemente segura")
+    if(not capital):
+        flash("La contraseña debe contener al menos una letra mayúscula")
+    if(not numeric):
+        flash("La contraseña debe tener al menos un valor numérico")
+    if(not len(password) > 6):
+        flash("La contraseña debe tener al menos 6 caracteres")
+    return valid
+
 @app.after_request
 def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
@@ -361,10 +381,19 @@ def signup():
         user = users.query.filter_by(email = f_email).first()
         add_user = True
         if user != None:
-            flash("User already exists. Try using a different email.")
+            flash("Usuario ya existe. Intenta ingresar un correo diferente")
             add_user = False
         if(f_password != f_confirmed_password):
-            flash("Passwords don't match")
+            flash("Las contraseñas no coinciden")
+            add_user = False
+        else:
+            if(not check_password_sign_up(f_password)):
+                add_user = False
+        if(not re.fullmatch(regex, f_email)):
+            flash("Por favor ingresa un correo electrónico valido")
+            add_user = False
+        if(f_name.isdigit()):
+            flash("El nombre no puede corresponder a un valor numérico")
             add_user = False
         if(add_user):
             session["filling_email"] = f_email
@@ -373,7 +402,7 @@ def signup():
             new_user = users(f_name, f_email, f_password, "https://%s.s3.amazonaws.com/%s"%(os.environ.get('S3_BUCKET_NAME'), "profile_pictures/" + "avatar3.png"), 0, f_is_admin, "Una descripción acerca de mí se encontrará en este lugar pronto...")
             db.session.add(new_user)
             db.session.commit()
-            flash("You were signed up successfully")
+            # flash("You were signed up successfully")
             return redirect(url_for("login"))
     if "name" in session:
         return redirect(url_for("home"))
