@@ -445,11 +445,14 @@ def account():
                 if(new_name != ""):
                     if(old_password != ""):
                         if(session["password"] == old_password):
-                            session["name"] = new_name
-                            user = users.query.filter_by(email = session["email"]).first()
-                            user.name = session["name"]
-                            db.session.commit()
-                            flash("Profile name changed successfully")
+                            if(new_name.isdigit()):
+                                flash("Name can't be a number value")
+                            else:
+                                session["name"] = new_name
+                                user = users.query.filter_by(email = session["email"]).first()
+                                user.name = session["name"]
+                                db.session.commit()
+                                flash("Profile name changed successfully")
                         else:
                             flash("Incorrect current password. Please try again.")
                             current_flag = True
@@ -460,11 +463,12 @@ def account():
                         if(old_password != ""):
                             if(new_password == confirmed_new_password):
                                 if(session["password"] == old_password):
-                                    session["password"] = new_password
-                                    user = users.query.filter_by(email = session["email"]).first()
-                                    user.password = session["password"]
-                                    db.session.commit()
-                                    flash("Password changed successfully")
+                                    if(check_password_sign_up(new_password)):
+                                        session["password"] = new_password
+                                        user = users.query.filter_by(email = session["email"]).first()
+                                        user.password = session["password"]
+                                        db.session.commit()
+                                        flash("Password changed successfully")
                                 else:
                                     if(current_flag == False):
                                       flash("Incorrect current password. Please try again.")  

@@ -102,38 +102,38 @@ collection_item = collection_items("Billete", "Colombia", "1000 pesos", "2010", 
 like = likes(1, "elkin@gmail.com")
 comment = comments(1, "elkin@gmail.com", "Comentario..")
 
-@app.route("/login/", methods=["POST", "GET"])
-def login():
-    email = None
-    password = None
-    if "filling_email" in session:
-        email = session["filling_email"]
-    if "filling_password" in session:
-        password = session["filling_password"]
-    if request.method == "POST":
-        f_email = request.form["email"]
-        f_password = request.form["password"]
-        user = users.query.filter_by(email = f_email).first()
-        if(user != None):
-            if(f_password == user.password):
-                session["filling_email"] = user.email
-                session["filling_password"] = user.password
-                session["name"] = user.name
-                session["email"] = user.email
-                session["password"] = user.password
-                session["profile_picture_path"] = user.profile_picture_path
-                session["num_item"] = user.num_item
-                session["is_admin"] = user.is_admin
-                session["about_me_text"] = user.about_me_text
-                session.permanent = True
-                return 'redirect(url_for("home"))'
-            else:
-               print("Password incorrect. Please try again.") 
-        else:
-            print("User doesn't exist. Please create an account.")
+@app.route("/collection", methods=["POST", "GET"])
+def collection():
     if "name" in session:
-        return 'redirect(url_for("home"))'
-    return 'render_template("../authentication/login.html", email = email)'
+        if session["is_admin"] == True:
+            if request.method == "POST":
+                if list(request.form.keys())[0].split('|')[0] == "input_text_comment":
+                    input_text_comment = request.form[list(request.form.keys())[0]]
+                    new_comment = comments(list(request.form.keys())[0].split('|')[1], list(request.form.keys())[0].split('|')[2], input_text_comment)
+                    db.session.add(new_comment)
+                    db.session.commit()
+                else:
+                    item_id = int(list(request.form.keys())[0])
+                    like = likes.query.filter(likes.item_id == item_id and likes.user_email == session["email"]).first()
+                    if like == None:
+                        new_like = likes(item_id, session["email"])
+                        db.session.add(new_like)
+                        db.session.commit()
+                    else:
+                        db.session.delete(like)
+                        db.session.commit()
+            items = collection_items.query.filter_by(email = session["email"])
+            user_likes = set()
+            q = likes.query.filter(likes.user_email == session["email"])
+            for l in q:
+                user_likes.add(l.item_id)
+            return 'render_template("app/collection.html", name = session["name"], email = session["email"], profile_picture_path = session["profile_picture_path"], is_admin = session["is_admin"], items = items, logged_in = True, user_likes = user_likes)'
+        else:
+            print("Only admin users can go to this page")
+            return 'redirect(url_for("account"))'
+    else:
+        print("You're not logged in. Please log in or create an acocunt.")
+        return 'redirect(url_for("login"))'
 
 db.create_all()
 app.run()
