@@ -231,6 +231,13 @@ comment = comments(1, "elkin@gmail.com", "Comentario..")
 # Casos de prueba para la función get_comments
 # get_comments(11)
 
-# Casos de prueba para la función
+# Casos de prueba para la función check_password_sign_up
 # check_password_sign_up("Usuario1989")
 # check_password_sign_up("juan")
+
+# Casos de prueba para la función KMPSearch
+# KMPSearch("Cplombia", "Colombia")
+# KMPSearch("Rplombia", "Colombia")
+# KMPSearch("Colombia", "Colombia")
+# KMPSearch("AAA", "Colombia")
+# KMPSearch("ABAA", "Colombia")
