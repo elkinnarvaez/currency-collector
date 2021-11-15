@@ -515,7 +515,7 @@ def add_item():
                     if obverse_image and reverse_image and allowed_file(obverse_image.filename) and allowed_file(reverse_image.filename):
                         product_type = request.form["type"]
                         country = request.form["country"]
-                        denomination = request.form["denomination"]
+                        denomination = request.form["denomination"] + " " + request.form["currency"]
                         year = request.form["year"]
                         composition = request.form["composition"]
                         description = request.form["description"]
